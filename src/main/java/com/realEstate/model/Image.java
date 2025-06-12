@@ -1,5 +1,6 @@
 package com.realEstate.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -16,6 +17,7 @@ public class Image {
 
     // Property the image belongs to
     @ManyToOne
+    @JsonBackReference
     private Property property;
 
     public Long getId() {
@@ -34,4 +36,11 @@ public class Image {
         this.url = url;
     }
 
+    public Property getProperty() {
+        return property;
+    }
+
+    public void setProperty(Property property) {
+        this.property = property;
+    }
 }

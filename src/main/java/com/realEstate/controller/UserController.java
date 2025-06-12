@@ -1,5 +1,6 @@
 package com.realEstate.controller;
 
+import com.realEstate.dto.RegisterRequest;
 import com.realEstate.exception.ResourceNotFoundException;
 import com.realEstate.model.User;
 import com.realEstate.service.UserService;
@@ -7,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,16 +24,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // Documents the endpoint for creating a new user
-    @Operation(summary = "Create a new user")
-    // Maps HTTP POST requests to /api/users
-    @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        // Calls the service to save the user from the request body
-        User savedUser = userService.saveUser(user);
-        // Returns the saved user with HTTP 200 OK
-        return ResponseEntity.ok(savedUser);
-    }
 
     // Documents the endpoint for retrieving all users
     @Operation(summary = "Get all users")
@@ -64,4 +56,12 @@ public class UserController {
         // Returns the updated user with HTTP 200 OK
         return ResponseEntity.ok(updated);
     }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

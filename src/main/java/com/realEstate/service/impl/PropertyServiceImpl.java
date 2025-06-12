@@ -1,6 +1,7 @@
 package com.realEstate.service.impl;
 
 import com.realEstate.exception.ResourceNotFoundException;
+import com.realEstate.model.Image;
 import com.realEstate.model.Property;
 import com.realEstate.repository.PropertyRepository;
 import com.realEstate.service.PropertyService;
@@ -20,6 +21,11 @@ public class PropertyServiceImpl implements PropertyService {
     // Persist a property entity to the database
     @Override
     public Property saveProperty(Property property) {
+        if (property.getImages() != null) {
+            for (Image image : property.getImages()) {
+                image.setProperty(property);
+            }
+        }
         return propertyRepository.save(property);
     }
 

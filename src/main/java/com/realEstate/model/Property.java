@@ -1,6 +1,7 @@
 package com.realEstate.model;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -39,8 +40,10 @@ public class Property {
     private User owner;
 
     // Associated images
-    @OneToMany(mappedBy = "property", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Image> images;
+
 
     public List<Image> getImages() {
         return images;
