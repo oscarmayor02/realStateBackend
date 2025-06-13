@@ -116,4 +116,55 @@ public class Property {
     public void setId(Long id) {
         this.id = id;
     }
+
+    // Constructor requerido por JPA
+    public Property() {}
+
+    // Constructor privado para el builder
+    private Property(Builder builder) {
+        this.id = builder.id;
+        this.title = builder.title;
+        this.description = builder.description;
+        this.location = builder.location;
+        this.type = builder.type;
+        this.price = builder.price;
+        this.available = builder.available;
+        this.owner = builder.owner;
+        this.images = builder.images;
+    }
+
+    // Métodos getter y setter...
+
+    // Builder manual
+    public static class Builder {
+        private Long id;
+        private String title;
+        private String description;
+        private String location;
+        private PropertyType type;
+        private Double price;
+        private Boolean available;
+        private User owner;
+        private List<Image> images;
+
+        public Builder id(Long id) { this.id = id; return this; }
+        public Builder title(String title) { this.title = title; return this; }
+        public Builder description(String description) { this.description = description; return this; }
+        public Builder location(String location) { this.location = location; return this; }
+        public Builder type(PropertyType type) { this.type = type; return this; }
+        public Builder price(Double price) { this.price = price; return this; }
+        public Builder available(Boolean available) { this.available = available; return this; }
+        public Builder owner(User owner) { this.owner = owner; return this; }
+        public Builder images(List<Image> images) { this.images = images; return this; }
+
+        public Property build() {
+            return new Property(this);
+        }
+    }
+
+    // Método para obtener el builder
+    public static Builder builder() {
+        return new Builder();
+    }
+
 }

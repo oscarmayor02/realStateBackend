@@ -1,4 +1,5 @@
 package com.realEstate.controller;
+import com.realEstate.dto.ReservationRequest;
 import com.realEstate.model.Reservation;
 import com.realEstate.service.ReservationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,7 +31,7 @@ public class ReservationController {
     @Operation(summary = "Save a reservation")
     // Maps HTTP POST requests to /api/reservations
     @PostMapping
-    public Reservation save(@RequestBody Reservation reservation) {
+    public Reservation save(@RequestBody ReservationRequest reservation) {
         // Saves the reservation received in the request body and returns it
         return reservationService.saveReservation(reservation);
     }
