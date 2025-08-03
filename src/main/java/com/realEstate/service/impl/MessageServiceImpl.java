@@ -1,21 +1,47 @@
-package com.realEstate.service.impl;
+    package com.realEstate.service.impl;
 
-import com.realEstate.model.Message;
-import com.realEstate.repository.MessageRepository;
-import com.realEstate.service.MessageService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+    import com.realEstate.dto.ConversationDTO;
+    import com.realEstate.dto.UserDTO;
+    import com.realEstate.model.Message;
+    import com.realEstate.model.User;
+    import com.realEstate.repository.MessageRepository;
+    import com.realEstate.service.MessageService;
+    import org.springframework.beans.factory.annotation.Autowired;
+    import org.springframework.stereotype.Service;
 
-// Implements logic for messaging feature
-@Service
-public class MessageServiceImpl implements MessageService {
+    import java.util.List;
 
-    @Autowired
-    private MessageRepository messageRepository;
+    // Implements logic for messaging feature
+    @Service
+    public class MessageServiceImpl implements MessageService {
 
-    // Save message to the database
-    @Override
-    public Message saveMessage(Message message) {
-        return messageRepository.save(message);
+        @Autowired
+        private MessageRepository messageRepository;
+
+        // Save message to the database
+        @Override
+        public Message saveMessage(Message message) {
+            return messageRepository.save(message);
+        }
+
+        @Override
+        public List<Message> getChatHistory(Long user1Id, Long user2Id) {
+            return messageRepository.findChatHistory(user1Id, user2Id);
+
+        }
+        @Override
+        public List<UserDTO> getUserConversations(Long userId) {
+            return messageRepository.findDistinctContacts(userId);
+        }
+
+        @Override
+        public void markMessagesAsRead(Long senderId, Long receiverId) {
+            messageRepository.markMessagesAsRead(senderId, receiverId);
+        }
+
+        @Override
+        public List<ConversationDTO> getDetailedUserConversations(Long userId) {
+            return messageRepository.findDetailedConversations(userId);
+        }
+
     }
-}

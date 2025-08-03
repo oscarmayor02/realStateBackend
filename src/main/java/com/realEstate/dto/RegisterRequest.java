@@ -25,6 +25,8 @@ public class RegisterRequest {
     @NotBlank(message = "Password is required")
     private String password;
 
+    @NotBlank(message = "cedula is required")
+    private String  cedula;
     // Role selected by the user during registration (CLIENT or HOST only)
     @NotNull(message = "Role is required")
     private Role role;
@@ -70,5 +72,13 @@ public class RegisterRequest {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getCedula() {
+        return cedula;
+    }
+
+    public void setCedula(String cedula) {
+        this.cedula = cedula;
     }
 }

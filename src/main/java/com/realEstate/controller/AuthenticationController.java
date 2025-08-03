@@ -38,16 +38,14 @@ public class AuthenticationController {
 
     // Handles POST requests to /api/auth/login
     @PostMapping("/login")
-    public String authenticate(@RequestParam String username, @RequestParam String password) {
+    public String authenticate(@RequestParam String email, @RequestParam String password) {
         try {
-            // Authenticates the user with the provided username and password
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(username, password)
+                    new UsernamePasswordAuthenticationToken(email, password)
             );
-            // If authentication is successful, generate and return a JWT token
-            return jwtService.generateToken(username);
+            User user = userService.getByEmail(email)
+                    .orElseThrow(() -> new RuntimeException("User not found"));            return jwtService.generateToken(user);
         } catch (AuthenticationException e) {
-            // If authentication fails, throw an exception with an invalid credentials message
             throw new RuntimeException("Invalid credentials");
         }
     }
@@ -57,6 +55,8 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "201", description = "User created successfully",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
             @ApiResponse(responseCode = "409", description = "Email already exists",
+                    content = @Content),
+            @ApiResponse(responseCode = "409", description = "Cedula already exists",
                     content = @Content),
             @ApiResponse(responseCode = "403", description = "Forbidden role (ADMIN not allowed)",
                     content = @Content)

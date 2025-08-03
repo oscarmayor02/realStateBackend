@@ -1,5 +1,6 @@
 package com.realEstate.security;
 
+import com.realEstate.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -7,6 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 // Marks this class as a Spring service component
 @Service
@@ -21,18 +24,30 @@ public class JwtService {
     private long expiration;
 
     // Generates a JWT token using the provided username
-    public String generateToken(String username) {
-        return Jwts.builder() // Starts building the JWT
-                .setSubject(username) // Sets the username as the subject of the token
-                .setIssuedAt(new Date()) // Sets the current date as the issue date
-                .setExpiration(new Date(System.currentTimeMillis() + expiration)) // Sets the expiration date
-                .signWith(SignatureAlgorithm.HS512, secret) // Signs the token with the secret and algorithm
-                .compact(); // Builds and serializes the token to a compact string
+    public String generateToken(User user) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", user.getRole().name());
+        claims.put("idUser", user.getId()); // Agrega el id como claim
+        claims.put("name", user.getName()); // Agrega el nombre como claim
+        System.out.println("Nombre en el token: " + user.getName());
+        return Jwts.builder()
+                .setClaims(claims)
+
+                .setSubject(user.getEmail())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                .signWith(SignatureAlgorithm.HS512, secret)
+                .compact();
     }
 
     // Extracts the username (subject) from the token
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject); // Uses a claim resolver to get the subject
+    }
+
+    public Long extractUserId(String token) {
+        Claims claims = extractAllClaims(token);
+        return claims.get("idUser", Long.class);
     }
 
     // Extracts any claim from the token using a resolver function
@@ -43,10 +58,16 @@ public class JwtService {
 
     // Parses the token and retrieves all claims
     private Claims extractAllClaims(String token) {
+        System.out.println("Nombre en el token: " + token);
         return Jwts.parser() // Creates a JWT parser
                 .setSigningKey(secret) // Sets the signing key for validation
                 .parseClaimsJws(token) // Parses the token
                 .getBody(); // Retrieves the claims body
+    }
+
+    public String extractName(String token) {
+        Claims claims = extractAllClaims(token);
+        return claims.get("name", String.class);
     }
 
     // Validates the token by checking username and expiration

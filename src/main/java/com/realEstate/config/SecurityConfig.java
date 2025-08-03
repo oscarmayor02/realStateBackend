@@ -32,26 +32,28 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
+                .cors(cors -> {}) // ✅ Esta es la forma nueva y correcta en Spring Security 6+
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/ws/**").permitAll()  // ✅ PERMITE CONEXIÓN WS
+                        .requestMatchers(HttpMethod.GET, "/api/properties/{id:[\\d]+}").permitAll() // ✅ ESTA ES LA LÍNEA NUEVA
 
-                        // Permitir lectura pública de propiedades
-                        .requestMatchers(HttpMethod.GET, "/api/properties/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/properties/available").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/properties/filter").permitAll()
 
-                        // Propiedades
-                        .requestMatchers(HttpMethod.GET, "/api/properties/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/properties/**").hasAnyRole("HOST", "ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/properties/**").hasAnyRole("HOST", "ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/properties/**").hasAnyRole("HOST", "ADMIN")
 
-                        // Reservas
+                        .requestMatchers(HttpMethod.DELETE, "/api/properties/**").hasAnyRole("HOST", "ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/properties/owner/").hasAnyRole("HOST", "ADMIN")
+
                         .requestMatchers(HttpMethod.POST, "/api/reservations/**").hasAnyRole("CLIENT", "ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/reservations/**").hasAnyRole("CLIENT", "HOST", "ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/reservations/**").hasAnyRole("ADMIN", "HOST")
 
-                        // Mensajes
                         .requestMatchers("/api/messages/**").hasAnyRole("CLIENT", "HOST", "ADMIN")
-                        // Restricciones para usuarios
+                        .requestMatchers(HttpMethod.GET, "/api/users/id/**").hasAnyRole("CLIENT", "HOST", "ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/users/**").hasAnyRole("CLIENT", "HOST", "ADMIN")
                         .requestMatchers("/api/users/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
@@ -73,4 +75,5 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 }

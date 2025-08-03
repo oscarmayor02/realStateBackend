@@ -2,6 +2,7 @@ package com.realEstate.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -18,6 +19,8 @@ public class GlobalExceptionHandler {
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now()); // Adds the current timestamp
         body.put("message", ex.getMessage()); // Adds the exception message
+        body.put("error", ex.getClass().getSimpleName()); // Tipo de error
+
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
@@ -27,6 +30,8 @@ public class GlobalExceptionHandler {
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("message", ex.getMessage());
+        body.put("error", ex.getClass().getSimpleName()); // Tipo de error
+
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
@@ -36,6 +41,8 @@ public class GlobalExceptionHandler {
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("message", ex.getMessage());
+        body.put("error", ex.getClass().getSimpleName()); // Tipo de error
+
         return new ResponseEntity<>(body, HttpStatus.CONFLICT);
     }
 
@@ -45,6 +52,8 @@ public class GlobalExceptionHandler {
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("message", ex.getMessage());
+        body.put("error", ex.getClass().getSimpleName()); // Tipo de error
+
         return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
     }
 
@@ -54,15 +63,35 @@ public class GlobalExceptionHandler {
         Map<String, Object> body = new HashMap<>();
         body.put("timestamp", LocalDateTime.now());
         body.put("message", ex.getMessage());
+        body.put("error", ex.getClass().getSimpleName()); // Tipo de error
+
         return new ResponseEntity<>(body, HttpStatus.FORBIDDEN);
     }
 
-    // Handles any other exceptions and returns an INTERNAL_SERVER_ERROR response with a generic message
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleGeneral(Exception ex) {
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<Object> handleRuntimeException(RuntimeException ex) {
         Map<String, Object> body = new HashMap<>();
+        body.put("message", ex.getMessage()); // Muestra el mensaje real de la excepción
+        body.put("error", ex.getClass().getSimpleName());
         body.put("timestamp", LocalDateTime.now());
-        body.put("message", "An unexpected error occurred.");
-        return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
+
+    // Si tienes un handler genérico, asegúrate de usar ex.getMessage() también
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handleException(Exception ex) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("message", ex.getMessage());
+        body.put("error", ex.getClass().getSimpleName());
+        body.put("timestamp", LocalDateTime.now());
+        return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
 }
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<Object> handleUsernameNotFound(UsernameNotFoundException ex) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("message", ex.getMessage());
+        body.put("error", "UsernameNotFoundException");
+        body.put("timestamp", LocalDateTime.now());
+        return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
+    }
+    }

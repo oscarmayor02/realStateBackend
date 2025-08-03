@@ -3,18 +3,19 @@ package com.realEstate.dto;
 import com.realEstate.model.ReservationStatus;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class ReservationRequest {
     private Long propertyId;
     private Long userId;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDateTime  startDate;
+    private LocalDateTime endDate;
     private ReservationStatus status;
 
     public ReservationRequest() {
     }
 
-    public ReservationRequest(Long propertyId, Long userId, LocalDate startDate, LocalDate endDate, ReservationStatus status) {
+    public ReservationRequest(Long propertyId, Long userId, LocalDateTime  startDate, LocalDateTime  endDate, ReservationStatus status) {
         this.propertyId = propertyId;
         this.userId = userId;
         this.startDate = startDate;
@@ -38,19 +39,19 @@ public class ReservationRequest {
         this.userId = userId;
     }
 
-    public LocalDate getStartDate() {
+    public LocalDateTime  getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(LocalDateTime  startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDate getEndDate() {
+    public LocalDateTime  getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDate endDate) {
+    public void setEndDate(LocalDateTime  endDate) {
         this.endDate = endDate;
     }
 
