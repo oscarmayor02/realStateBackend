@@ -1,37 +1,83 @@
 package com.realEstate.controller;
+
+import com.realEstate.dto.ReservationRequest;
+import com.realEstate.dto.ReservationResponseDTO;
 import com.realEstate.model.Reservation;
+import com.realEstate.model.ReservationStatus;
 import com.realEstate.service.ReservationService;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
-// Marks this class as a Spring REST controller, handling HTTP requests and responses
 @RestController
-// Sets the base URL path for all endpoints in this controller
 @RequestMapping("/api/reservations")
 public class ReservationController {
 
-    // Injects the ReservationService to handle business logic related to reservations
     @Autowired
     private ReservationService reservationService;
 
-    // Documents the endpoint for retrieving all reservations
-    @Operation(summary = "Get all reservations")
-    // Maps HTTP GET requests to /api/reservations
+    @Operation(summary = "Obtener todas las reservas")
     @GetMapping
-    public List<Reservation> getAll() {
-        // Returns a list of all reservations from the service
-        return reservationService.getAllReservations();
+    public List<ReservationResponseDTO> getAll() {
+        return reservationService.getAllReservations().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
-    // Documents the endpoint for saving a new reservation
-    @Operation(summary = "Save a reservation")
-    // Maps HTTP POST requests to /api/reservations
+    @Operation(summary = "Crear una nueva reserva")
     @PostMapping
-    public Reservation save(@RequestBody Reservation reservation) {
-        // Saves the reservation received in the request body and returns it
-        return reservationService.saveReservation(reservation);
+    public ReservationResponseDTO save(@RequestBody ReservationRequest reservation) {
+        Reservation saved = reservationService.saveReservation(reservation);
+        return convertToDTO(saved);
+    }
+
+    @Operation(summary = "Actualizar el estado de una reserva")
+    @PatchMapping("/{id}/status")
+    public ReservationResponseDTO updateStatus(
+            @PathVariable Long id,
+            @RequestParam ReservationStatus status,  @AuthenticationPrincipal UserDetails adminUser
+    ) {
+        String adminEmail = adminUser.getUsername();
+        Reservation updated = reservationService.updateStatus(id, status,adminEmail);
+        return convertToDTO(updated);
+    }
+
+    @Operation(summary = "Obtener reservas recibidas por el host")
+    @GetMapping("/host/{hostId}")
+    public List<ReservationResponseDTO> getReservationsByHost(@PathVariable Long hostId) {
+        List<Reservation> reservations = reservationService.findByProperty_Host_Id(hostId);
+        return reservations.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Operation(summary = "Obtener reservas realizadas por el cliente")
+    @GetMapping("/client/{clientId}")
+    public List<ReservationResponseDTO> getReservationsByClient(@PathVariable Long clientId) {
+        List<Reservation> reservations = reservationService.findByUser_Id(clientId);
+        return reservations.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+
+    private ReservationResponseDTO convertToDTO(Reservation reservation) {
+        return new ReservationResponseDTO(
+                reservation.getId(),
+                reservation.getStartDate(),
+                reservation.getEndDate(),
+                reservation.getUser().getId(),
+                reservation.getUser().getName(), // suponiendo que existe un getName()
+                reservation.getProperty().getTitle(), // suponiendo que existe un getTitle()
+                reservation.getStatus(),
+                reservation.getProperty().getHost().getId(),
+                reservation.getProperty().getAddress() // <-- aquí
+
+        );
     }
 }
