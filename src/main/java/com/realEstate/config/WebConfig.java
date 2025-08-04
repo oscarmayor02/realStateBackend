@@ -18,7 +18,8 @@ public class WebConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:4200")); // origen frontend
+        //config.setAllowedOrigins(List.of("http://localhost:4200")); // origen frontend
+        config.setAllowedOrigins(List.of("https://unrivaled-panda-0d5a0c.netlify.app"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT","PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
