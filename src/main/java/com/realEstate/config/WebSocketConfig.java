@@ -15,7 +15,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
-                .setAllowedOriginPatterns("http://localhost:4200") // ✅ Permite con credenciales desde Angular
+                .setAllowedOriginPatterns("https://unrivaled-panda-0d5a0c.netlify.app") // ✅ Permite con credenciales desde Angular
                 .withSockJS();
     }
 
