@@ -51,7 +51,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public String cargarTemplate(String nombreArchivo, Map<String, String> variables) throws IOException {
         ClassPathResource resource = new ClassPathResource("templates/emails/" + nombreArchivo);
-        String contenido = Files.readString(resource.getFile().toPath(), StandardCharsets.UTF_8);
+        String contenido = new String(resource.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
 
         for (Map.Entry<String, String> entry : variables.entrySet()) {
             contenido = contenido.replace("${" + entry.getKey() + "}", entry.getValue());
@@ -59,6 +59,7 @@ public class EmailServiceImpl implements EmailService {
 
         return contenido;
     }
+
 
 
 //    public String cargarTemplate(String nombreArchivo, Map<String, String> variables) throws IOException {
