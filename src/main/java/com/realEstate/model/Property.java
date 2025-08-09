@@ -48,8 +48,7 @@ package com.realEstate.model;
                     @JoinColumn(name = "user_id")
                     private User host;
 
-                    @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-                    @JsonManagedReference
+                    @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
                     private List<Image> images;
 
                     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
