@@ -281,6 +281,7 @@ public class PropertyController {
                         dto.setDayOfWeek(a.getDayOfWeek());
                         dto.setStartTime(a.getStartTime());
                         dto.setEndTime(a.getEndTime());
+
                         return dto;
                     }).collect(Collectors.toList());
             response.setAvailabilityList(availabilityDTOs);

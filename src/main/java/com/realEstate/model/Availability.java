@@ -15,16 +15,18 @@ public class Availability {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "day_of_week")
     private DayOfWeek dayOfWeek;
-    @JsonFormat(pattern = "HH:mm")
 
+    @Column(name = "start_time")
     private LocalTime startTime;
-    @JsonFormat(pattern = "HH:mm")
 
+    @Column(name = "end_time")
     private LocalTime endTime;
 
-    @ManyToOne
-    @JsonManagedReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "property_id")
     private Property property;
 
     // Getters & setters
