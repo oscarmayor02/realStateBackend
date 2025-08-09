@@ -75,7 +75,7 @@ public class ReservationServiceImpl implements ReservationService {
             String contenidoHtml = emailServiceImpl.cargarTemplate("reservation-notify-host.html", variables);
 
             emailServiceImpl.enviarCorreoHtml(
-                    cliente.getEmail(),
+                    host.getEmail(),
                     "¡Te han reservado una propiedad en UbikkApp!",
                     contenidoHtml
             );
@@ -106,8 +106,8 @@ public class ReservationServiceImpl implements ReservationService {
         String estado = reservation.getStatus().name();
 
         String mensaje = estado.equals("CONFIRMED") ?
-                " ACEPTADA " :
-                " RECHAZADA ";
+                " ACEPTAD0 " :
+                " RECHAZADO ";
 
         // Cargar el template HTML y enviar correo
         try {
