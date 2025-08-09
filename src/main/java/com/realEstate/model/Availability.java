@@ -15,10 +15,10 @@ public class Availability {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     @Column(name = "day_of_week")
     private DayOfWeek dayOfWeek;
-
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     @Column(name = "start_time")
     private LocalTime startTime;
 
