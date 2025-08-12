@@ -1,6 +1,7 @@
 package com.realEstate.repository;
 import com.realEstate.model.Property;
-import com.realEstate.model.PropertyType;
+import com.realEstate.model.OperationType;
+import com.realEstate.model.PropertyCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,6 +17,7 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
             "(:departamento IS NULL OR p.departamento = :departamento) AND " +
             "(:ciudad IS NULL OR p.ciudad = :ciudad) AND " +
             "(:type IS NULL OR p.type = :type) AND " +
+            "(:category IS NULL OR p.propertyCategory = :category) AND " +
             "(:minPrice IS NULL OR p.price >= :minPrice) AND " +
             "(:maxPrice IS NULL OR p.price <= :maxPrice) AND " +
             "(:bedrooms IS NULL OR p.bedrooms >= :bedrooms) AND " + // 👈 nuevo filtro
@@ -23,7 +25,8 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
     List<Property> filterProperties(
             @Param("departamento") String departamento,
             @Param("ciudad") String ciudad,
-            @Param("type") PropertyType type,
+            @Param("type") OperationType type,
+            @Param("category") PropertyCategory category,
             @Param("minPrice") Double minPrice,
             @Param("maxPrice") Double maxPrice,
             @Param("bedrooms") Integer bedrooms,

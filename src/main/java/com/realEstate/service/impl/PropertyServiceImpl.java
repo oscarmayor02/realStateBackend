@@ -2,7 +2,6 @@ package com.realEstate.service.impl;
 
 import com.realEstate.dto.AvailabilityDTO;
 import com.realEstate.dto.PropertyRequest;
-import com.realEstate.dto.PropertyResponse;
 import com.realEstate.exception.ResourceNotFoundException;
 import com.realEstate.model.*;
 import com.realEstate.repository.FavoriteRepository;
@@ -47,7 +46,7 @@ public class PropertyServiceImpl implements PropertyService {
 
     // Persist a property entity to the database
     @Override
-    public Property saveProperty(PropertyRequest request,  String performedBy) throws IOException {
+    public Property saveProperty(PropertyRequest request, String performedBy) throws IOException {
         // Uploads the image from the request to Cloudinary and gets the image URL
         Property property = new Property();
         property.setTitle(request.getTitle());
@@ -208,16 +207,18 @@ public class PropertyServiceImpl implements PropertyService {
     public List<Property> filterProperties(
             String departamento,
             String ciudad,
-            PropertyType type,
+            OperationType type,
+            PropertyCategory category,
             Double minPrice,
             Double maxPrice,
             Integer bedrooms,
             Boolean available
     ) {
         return propertyRepository.filterProperties(
-                departamento, ciudad, type, minPrice, maxPrice, bedrooms, available
+                departamento, ciudad, type, category, minPrice, maxPrice, bedrooms, available
         );
     }
+
     public Property getById(Long id) {
         return propertyRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Propiedad no encontrada con ID: " + id));
@@ -232,7 +233,6 @@ public class PropertyServiceImpl implements PropertyService {
         reservationRepository.deleteByProperty_Id(id); // Elimina reservas asociadas
         propertyRepository.deleteById(id);
     }
-
 
 
     @Override

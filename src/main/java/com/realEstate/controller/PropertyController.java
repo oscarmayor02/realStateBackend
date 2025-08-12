@@ -4,7 +4,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.realEstate.dto.*;
 import com.realEstate.model.Property;
-import com.realEstate.model.PropertyType;
+import com.realEstate.model.OperationType;
+import com.realEstate.model.PropertyCategory;
 import com.realEstate.service.impl.PropertyServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -88,7 +89,7 @@ public class PropertyController {
         propertyRequest.setBalcony(balcony);
         propertyRequest.setTerrace(terrace);
         propertyRequest.setPool(pool);
-        propertyRequest.setType(Enum.valueOf(PropertyType.class, type));
+        propertyRequest.setType(Enum.valueOf(OperationType.class, type));
         propertyRequest.setPrice(price);
         propertyRequest.setAvailable(available);
         propertyRequest.setOwnerId(ownerId);
@@ -165,7 +166,7 @@ public class PropertyController {
         propertyRequest.setBalcony(balcony);
         propertyRequest.setTerrace(terrace);
         propertyRequest.setPool(pool);
-        propertyRequest.setType(Enum.valueOf(PropertyType.class, type));
+        propertyRequest.setType(Enum.valueOf(OperationType.class, type));
         propertyRequest.setPrice(price);
         propertyRequest.setAvailable(available);
         propertyRequest.setOwnerId(ownerId);
@@ -187,14 +188,15 @@ public class PropertyController {
     public List<PropertyResponse> filterProperties(
             @RequestParam(required = false) String departamento,
             @RequestParam(required = false) String ciudad,
-            @RequestParam(required = false) PropertyType type,
+            @RequestParam(required = false) OperationType type,
+            @RequestParam(required = false) PropertyCategory category, // CASA / APARTAMENTO / LOTE
             @RequestParam(required = false) Double minPrice,
             @RequestParam(required = false) Double maxPrice,
             @RequestParam(required = false) Integer bedrooms, // 👈 nuevo filtro
             @RequestParam(required = false) Boolean available
     ) {
         List<Property> properties = propertyService.filterProperties(
-                departamento, ciudad, type, minPrice, maxPrice, bedrooms, available
+                departamento, ciudad, type,category, minPrice, maxPrice, bedrooms, available
         );
         return properties.stream().map(this::mapToResponse).collect(Collectors.toList());
     }

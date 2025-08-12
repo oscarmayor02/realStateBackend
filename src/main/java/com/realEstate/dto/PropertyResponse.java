@@ -27,6 +27,7 @@ public class PropertyResponse {
     private Boolean terrace;
     private Boolean pool;
     private String type;
+    private String propertyCategory;
     private double price;
     private boolean available;
     private List<AvailabilityDTO> availabilityList;
@@ -34,6 +35,15 @@ public class PropertyResponse {
     private UserDTO host;
     private LocalDateTime createdAt;
     private boolean destacado;
+
+    public String getPropertyCategory() {
+        return propertyCategory;
+    }
+
+    public void setPropertyCategory(String propertyCategory) {
+        this.propertyCategory = propertyCategory;
+    }
+
     public boolean isDestacado() {
         return destacado;
     }
@@ -41,10 +51,12 @@ public class PropertyResponse {
     public void setDestacado(boolean destacado) {
         this.destacado = destacado;
     }
+
     // getter y setter
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
+
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
@@ -56,53 +68,191 @@ public class PropertyResponse {
     public void setHost(UserDTO host) {
         this.host = host;
     }
+
     // Getters y setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-    public String getDepartamento() { return departamento; }
-    public void setDepartamento(String departamento) { this.departamento = departamento; }
-    public String getCiudad() { return ciudad; }
-    public void setCiudad(String ciudad) { this.ciudad = ciudad; }
-    public Double getLatitude() { return latitude; }
-    public void setLatitude(Double latitude) { this.latitude = latitude; }
-    public Double getLongitude() { return longitude; }
-    public void setLongitude(Double longitude) { this.longitude = longitude; }
-    public Integer getBedrooms() { return bedrooms; }
-    public void setBedrooms(Integer bedrooms) { this.bedrooms = bedrooms; }
-    public Integer getBathrooms() { return bathrooms; }
-    public void setBathrooms(Integer bathrooms) { this.bathrooms = bathrooms; }
-    public Double getArea() { return area; }
-    public void setArea(Double area) { this.area = area; }
-    public String getAddress() { return address; }
-    public void setAddress(String address) { this.address = address; }
-    public Integer getYearBuilt() { return yearBuilt; }
-    public void setYearBuilt(Integer yearBuilt) { this.yearBuilt = yearBuilt; }
-    public String getOperationType() { return operationType; }
-    public void setOperationType(String operationType) { this.operationType = operationType; }
-    public Integer getParkingSpaces() { return parkingSpaces; }
-    public void setParkingSpaces(Integer parkingSpaces) { this.parkingSpaces = parkingSpaces; }
-    public Integer getEstrato() { return estrato; }
-    public void setEstrato(Integer estrato) { this.estrato = estrato; }
-    public Boolean getPetsAllowed() { return petsAllowed; }
-    public void setPetsAllowed(Boolean petsAllowed) { this.petsAllowed = petsAllowed; }
-    public Boolean getBalcony() { return balcony; }
-    public void setBalcony(Boolean balcony) { this.balcony = balcony; }
-    public Boolean getTerrace() { return terrace; }
-    public void setTerrace(Boolean terrace) { this.terrace = terrace; }
-    public Boolean getPool() { return pool; }
-    public void setPool(Boolean pool) { this.pool = pool; }
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
-    public double getPrice() { return price; }
-    public void setPrice(double price) { this.price = price; }
-    public boolean isAvailable() { return available; }
-    public void setAvailable(boolean available) { this.available = available; }
-    public List<AvailabilityDTO> getAvailabilityList() { return availabilityList; }
-    public void setAvailabilityList(List<AvailabilityDTO> availabilityList) { this.availabilityList = availabilityList; }
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDepartamento() {
+        return departamento;
+    }
+
+    public void setDepartamento(String departamento) {
+        this.departamento = departamento;
+    }
+
+    public String getCiudad() {
+        return ciudad;
+    }
+
+    public void setCiudad(String ciudad) {
+        this.ciudad = ciudad;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Integer getBedrooms() {
+        return bedrooms;
+    }
+
+    public void setBedrooms(Integer bedrooms) {
+        this.bedrooms = bedrooms;
+    }
+
+    public Integer getBathrooms() {
+        return bathrooms;
+    }
+
+    public void setBathrooms(Integer bathrooms) {
+        this.bathrooms = bathrooms;
+    }
+
+    public Double getArea() {
+        return area;
+    }
+
+    public void setArea(Double area) {
+        this.area = area;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Integer getYearBuilt() {
+        return yearBuilt;
+    }
+
+    public void setYearBuilt(Integer yearBuilt) {
+        this.yearBuilt = yearBuilt;
+    }
+
+    public String getOperationType() {
+        return operationType;
+    }
+
+    public void setOperationType(String operationType) {
+        this.operationType = operationType;
+    }
+
+    public Integer getParkingSpaces() {
+        return parkingSpaces;
+    }
+
+    public void setParkingSpaces(Integer parkingSpaces) {
+        this.parkingSpaces = parkingSpaces;
+    }
+
+    public Integer getEstrato() {
+        return estrato;
+    }
+
+    public void setEstrato(Integer estrato) {
+        this.estrato = estrato;
+    }
+
+    public Boolean getPetsAllowed() {
+        return petsAllowed;
+    }
+
+    public void setPetsAllowed(Boolean petsAllowed) {
+        this.petsAllowed = petsAllowed;
+    }
+
+    public Boolean getBalcony() {
+        return balcony;
+    }
+
+    public void setBalcony(Boolean balcony) {
+        this.balcony = balcony;
+    }
+
+    public Boolean getTerrace() {
+        return terrace;
+    }
+
+    public void setTerrace(Boolean terrace) {
+        this.terrace = terrace;
+    }
+
+    public Boolean getPool() {
+        return pool;
+    }
+
+    public void setPool(Boolean pool) {
+        this.pool = pool;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
+    public List<AvailabilityDTO> getAvailabilityList() {
+        return availabilityList;
+    }
+
+    public void setAvailabilityList(List<AvailabilityDTO> availabilityList) {
+        this.availabilityList = availabilityList;
+    }
 
     public List<Map<String, String>> getImages() {
         return images;
