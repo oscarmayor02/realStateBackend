@@ -40,9 +40,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public User saveUser(RegisterRequest user) {
         Optional<User> existingUser = this.getByEmail(user.getEmail());
-        if (existingUser.isPresent()) {
-            throw new ConflictException("Email already exists: " + user.getEmail());
-        }
+//        if (existingUser.isPresent()) {
+//            throw new ConflictException("Email already exists: " + user.getEmail());
+//        }
         if (userRepository.existsByCedula(user.getCedula())) {
             throw new ConflictException("Cédula already exists: " + user.getCedula());
         }
