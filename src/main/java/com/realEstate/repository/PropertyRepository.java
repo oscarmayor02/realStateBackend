@@ -17,7 +17,7 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
             "(:departamento IS NULL OR p.departamento = :departamento) AND " +
             "(:ciudad IS NULL OR p.ciudad = :ciudad) AND " +
             "(:operationType IS NULL OR p.operationType = :operationType) AND " +
-            "(:propertyTypeName IS NULL OR p.propertyTypeName = :propertyTypeName) AND " +
+            "(:propertyCategory IS NULL OR p.propertyCategory = :propertyCategory) AND " +
             "(:minPrice IS NULL OR p.price >= :minPrice) AND " +
             "(:maxPrice IS NULL OR p.price <= :maxPrice) AND " +
             "(:bedrooms IS NULL OR p.bedrooms >= :bedrooms) AND " + // 👈 nuevo filtro
@@ -26,7 +26,7 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
             @Param("departamento") String departamento,
             @Param("ciudad") String ciudad,
             @Param("operationType") OperationType operationType,
-            @Param("propertyTypeName") PropertyCategory propertyTypeName,
+            @Param("propertyCategory") PropertyCategory propertyCategory,
             @Param("minPrice") Double minPrice,
             @Param("maxPrice") Double maxPrice,
             @Param("bedrooms") Integer bedrooms,
