@@ -45,31 +45,24 @@
         @Query("UPDATE Message m SET m.read = true WHERE m.sender.id = :senderId AND m.receiver.id = :receiverId AND m.read = false AND m.propertyId = :propertyId")
         void markMessagesAsRead(@Param("senderId") Long senderId, @Param("receiverId") Long receiverId , @Param("propertyId") Long propertyId);
 
-        @Query(value = """
-    SELECT new com.realEstate.dto.ConversationDTO(
-        u.id,
-        u.name,
-        u.email,
-        SUM(CASE WHEN m.read = false AND m.receiver_id = :userId THEN 1 ELSE 0 END),
-        m.content,
-        m.timestamp,
-        m.property_id,
-        p.title
-    )
-    FROM messages m
-    JOIN users u ON u.id = CASE WHEN m.sender_id = :userId THEN m.receiver_id ELSE m.sender_id END
-    JOIN properties p ON p.id = m.property_id
-    WHERE m.id IN (
-        SELECT DISTINCT ON (property_id, LEAST(sender_id, receiver_id), GREATEST(sender_id, receiver_id))
-            id
-        FROM messages
-        WHERE sender_id = :userId OR receiver_id = :userId
-        ORDER BY property_id, LEAST(sender_id, receiver_id), GREATEST(sender_id, receiver_id), timestamp DESC
-    )
-    GROUP BY u.id, u.name, u.email, m.property_id, p.title, m.content, m.timestamp
-    ORDER BY m.timestamp DESC
-    """, nativeQuery = true)
+        // --- Conversaciones detalladas con último mensaje por chat y propiedad ---
+        @Query("SELECT new com.realEstate.dto.ConversationDTO(" +
+                "c.id, " +
+                "c.name, " +
+                "c.email, " +
+                "COALESCE(SUM(CASE WHEN m.read = false AND m.receiver.id = :userId THEN 1 ELSE 0 END), 0), " +
+                "MAX(m.content), " +
+                "MAX(m.timestamp), " +
+                "p.id, " +
+                "p.title) " +
+                "FROM Message m " +
+                "JOIN User c ON (c.id = CASE WHEN m.sender.id = :userId THEN m.receiver.id ELSE m.sender.id END) " +
+                "JOIN Property p ON p.id = m.propertyId " +
+                "WHERE m.sender.id = :userId OR m.receiver.id = :userId " +
+                "GROUP BY c.id, c.name, c.email, p.id, p.title " +
+                "ORDER BY MAX(m.timestamp) DESC")
         List<ConversationDTO> findDetailedConversations(@Param("userId") Long userId);
+
 
 
     }
