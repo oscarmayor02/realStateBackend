@@ -38,7 +38,7 @@ public class Property {
     private OperationType operationType;
 
     @Enumerated(EnumType.STRING)
-    private PropertyCategory propertyTypeName;
+    private PropertyCategory propertyCategory;
 
     private Double price;
     private Boolean available;
@@ -117,8 +117,21 @@ public class Property {
     public OperationType getOperationType() { return operationType; }
     public void setOperationType(OperationType operationType) { this.operationType = operationType; }
 
-    public PropertyCategory getPropertyTypeName() { return propertyTypeName; }
-    public void setPropertyTypeName(PropertyCategory propertyTypeName) { this.propertyTypeName = propertyTypeName; }
+    public boolean isParkingSpaces() {
+        return parkingSpaces;
+    }
+
+    public PropertyCategory getPropertyCategory() {
+        return propertyCategory;
+    }
+
+    public void setPropertyCategory(PropertyCategory propertyCategory) {
+        this.propertyCategory = propertyCategory;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 
     public Double getPrice() { return price; }
     public void setPrice(Double price) { this.price = price; }
