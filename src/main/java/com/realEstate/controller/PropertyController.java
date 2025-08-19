@@ -255,7 +255,7 @@ public class PropertyController {
         response.setAddress(property.getAddress());
         response.setYearBuilt(property.getYearBuilt());
         response.setOperationType(Enum.valueOf(OperationType.class, property.getOperationType().name()));
-        response.setPropertyTypeName(Enum.valueOf(PropertyCategory.class,property.getPropertyTypeName().name()));
+        response.setPropertyTypeName(Enum.valueOf(PropertyCategory.class,property.getPropertyCategory().name()));
         response.setParkingSpaces(property.getParkingSpaces());
         response.setEstrato(property.getEstrato());
         response.setPetsAllowed(property.getPetsAllowed());
