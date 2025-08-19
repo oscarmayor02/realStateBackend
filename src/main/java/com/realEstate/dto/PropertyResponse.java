@@ -1,6 +1,8 @@
 package com.realEstate.dto;
 
 import com.realEstate.model.Image;
+import com.realEstate.model.OperationType;
+import com.realEstate.model.PropertyCategory;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,14 +21,14 @@ public class PropertyResponse {
     private Double area;
     private String address;
     private Integer yearBuilt;
-    private String operationType;
-    private Integer parkingSpaces;
+    private OperationType operationType;
+    private PropertyCategory propertyTypeName;
+    private boolean parkingSpaces;
     private Integer estrato;
     private Boolean petsAllowed;
     private Boolean balcony;
     private Boolean terrace;
     private Boolean pool;
-    private String type;
     private String propertyCategory;
     private double price;
     private boolean available;
@@ -35,6 +37,18 @@ public class PropertyResponse {
     private UserDTO host;
     private LocalDateTime createdAt;
     private boolean destacado;
+
+    public PropertyCategory getPropertyTypeName() {
+        return propertyTypeName;
+    }
+
+    public void setPropertyTypeName(PropertyCategory propertyTypeName) {
+        this.propertyTypeName = propertyTypeName;
+    }
+
+    public void setOperationType(OperationType operationType) {
+        this.operationType = operationType;
+    }
 
     public String getPropertyCategory() {
         return propertyCategory;
@@ -166,19 +180,15 @@ public class PropertyResponse {
         this.yearBuilt = yearBuilt;
     }
 
-    public String getOperationType() {
+    public OperationType getOperationType() {
         return operationType;
     }
 
-    public void setOperationType(String operationType) {
-        this.operationType = operationType;
-    }
-
-    public Integer getParkingSpaces() {
+    public boolean isParkingSpaces() {
         return parkingSpaces;
     }
 
-    public void setParkingSpaces(Integer parkingSpaces) {
+    public void setParkingSpaces(boolean parkingSpaces) {
         this.parkingSpaces = parkingSpaces;
     }
 
@@ -222,13 +232,6 @@ public class PropertyResponse {
         this.pool = pool;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 
     public double getPrice() {
         return price;

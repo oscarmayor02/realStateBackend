@@ -10,9 +10,9 @@ import java.util.List;
 // Interface for messaging functionality between users
 public interface MessageService {
     Message saveMessage(Message message); // Save chat or contact message
-    List<Message> getChatHistory(Long user1Id, Long user2Id);
+    List<Message> getChatHistory(Long user1Id, Long user2Id, Long propertyId);
     List<UserDTO> getUserConversations(Long userId);
-    void markMessagesAsRead(Long senderId, Long receiverId);
+    void markMessagesAsRead(Long senderId, Long receiverId, Long propertyId);
     List<ConversationDTO> getDetailedUserConversations(Long userId);
 
 }
