@@ -27,7 +27,7 @@ public class Property {
     private Double area;
     private String address;
     private Integer yearBuilt;
-    private Boolean parkingSpaces;
+    private boolean parkingSpaces;
     private Integer estrato;
     private Boolean petsAllowed;
     private Boolean balcony;
@@ -97,7 +97,7 @@ public class Property {
     public void setYearBuilt(Integer yearBuilt) { this.yearBuilt = yearBuilt; }
 
     public Boolean getParkingSpaces() { return parkingSpaces; }
-    public void setParkingSpaces(Boolean parkingSpaces) { this.parkingSpaces = parkingSpaces; }
+    public void setParkingSpaces(boolean parkingSpaces) { this.parkingSpaces = parkingSpaces; }
 
     public Integer getEstrato() { return estrato; }
     public void setEstrato(Integer estrato) { this.estrato = estrato; }
