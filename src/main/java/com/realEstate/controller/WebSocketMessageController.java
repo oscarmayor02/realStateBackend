@@ -2,7 +2,9 @@ package com.realEstate.controller;
 import com.realEstate.dto.ConversationDTO;
 import com.realEstate.model.ChatMessage;
 import com.realEstate.model.Message;
+import com.realEstate.model.Property;
 import com.realEstate.model.User;
+import com.realEstate.repository.PropertyRepository;
 import com.realEstate.repository.UserRepository;
 import com.realEstate.service.MessageService;
 import com.realEstate.service.impl.EmailServiceImpl;
@@ -30,6 +32,11 @@ public class WebSocketMessageController {
 
     @Autowired
     private EmailServiceImpl emailServiceImpl;
+
+    @Autowired
+    private PropertyRepository propertyRepository; // Asegúrate de tener esto
+
+
     @MessageMapping("/chat")
     public void send(ChatMessage chatMessage) {
         User sender = userRepository.findById(chatMessage.getSenderId())
@@ -44,6 +51,13 @@ public class WebSocketMessageController {
         savedMessage.setSender(sender);
         savedMessage.setReceiver(receiver);
         savedMessage.setRead(false);
+        Property property = null;
+        if (chatMessage.getPropertyId() != null) {
+            property = propertyRepository.findById(chatMessage.getPropertyId())
+                    .orElseThrow(() -> new RuntimeException("Propiedad no encontrada"));
+        }
+        savedMessage.setProperty(property);
+
         messageService.saveMessage(savedMessage);
 
         // ✅ Enviar correo HTML al receptor del mensaje
