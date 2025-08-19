@@ -7,85 +7,48 @@ import java.time.LocalDateTime;
 @Table(name = "messages")
 public class Message {
 
-    // Unique ID for the message
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Message content
     private String content;
 
-    // Date and time of the message
     private LocalDateTime timestamp;
 
     @Column(name = "read", nullable = false)
     private boolean read = false;
 
-
-    // Sender of the message
     @ManyToOne
+    @JoinColumn(name = "sender_id")
     private User sender;
 
-    // Receiver of the message
     @ManyToOne
+    @JoinColumn(name = "receiver_id")
     private User receiver;
-    private Long propertyId; // 👈 nuevo campo
+
+    @ManyToOne
+    @JoinColumn(name = "property_id")
+    private Property property;
 
     // Getters y Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
+    public String getContent() { return content; }
+    public void setContent(String content) { this.content = content; }
 
-    public Long getPropertyId() {
-        return propertyId;
-    }
+    public LocalDateTime getTimestamp() { return timestamp; }
+    public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
 
-    public void setPropertyId(Long propertyId) {
-        this.propertyId = propertyId;
-    }
-    public Long getId() {
-        return id;
-    }
+    public boolean isRead() { return read; }
+    public void setRead(boolean read) { this.read = read; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public User getSender() { return sender; }
+    public void setSender(User sender) { this.sender = sender; }
 
-    public String getContent() {
-        return content;
-    }
+    public User getReceiver() { return receiver; }
+    public void setReceiver(User receiver) { this.receiver = receiver; }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public User getSender() {
-        return sender;
-    }
-
-    public void setSender(User sender) {
-        this.sender = sender;
-    }
-
-    public User getReceiver() {
-        return receiver;
-    }
-
-    public void setReceiver(User receiver) {
-        this.receiver = receiver;
-    }
-
-    public boolean isRead() {
-        return read;
-    }
-
-    public void setRead(boolean read) {
-        this.read = read;
-    }
+    public Property getProperty() { return property; }
+    public void setProperty(Property property) { this.property = property; }
 }
