@@ -25,8 +25,8 @@
         }
 
         @Override
-        public List<Message> getChatHistory(Long user1Id, Long user2Id) {
-            return messageRepository.findChatHistory(user1Id, user2Id);
+        public List<Message> getChatHistory(Long user1Id, Long user2Id, Long propertyId) {
+            return messageRepository.findChatHistory(user1Id, user2Id,  propertyId);
 
         }
         @Override
@@ -35,8 +35,8 @@
         }
 
         @Override
-        public void markMessagesAsRead(Long senderId, Long receiverId) {
-            messageRepository.markMessagesAsRead(senderId, receiverId);
+        public void markMessagesAsRead(Long senderId, Long receiverId, Long propertyId) {
+            messageRepository.markMessagesAsRead(senderId, receiverId, propertyId);
         }
 
         @Override

@@ -61,13 +61,12 @@ public class PropertyServiceImpl implements PropertyService {
         property.setAddress(request.getAddress());
         property.setYearBuilt(request.getYearBuilt());
         property.setOperationType(request.getOperationType());
-        property.setParkingSpaces(request.getParkingSpaces());
+        property.setParkingSpaces(request.isParkingSpaces());
         property.setEstrato(request.getEstrato());
         property.setPetsAllowed(request.getPetsAllowed());
         property.setBalcony(request.getBalcony());
         property.setTerrace(request.getTerrace());
         property.setPool(request.getPool());
-        property.setType(request.getType());
         property.setPrice(request.getPrice());
         property.setAvailable(request.isAvailable());
         property.setDestacado(request.isDestacado());
@@ -149,13 +148,12 @@ public class PropertyServiceImpl implements PropertyService {
         property.setAddress(request.getAddress());
         property.setYearBuilt(request.getYearBuilt());
         property.setOperationType(request.getOperationType());
-        property.setParkingSpaces(request.getParkingSpaces());
+        property.setParkingSpaces(request.isParkingSpaces());
         property.setEstrato(request.getEstrato());
         property.setPetsAllowed(request.getPetsAllowed());
         property.setBalcony(request.getBalcony());
         property.setTerrace(request.getTerrace());
         property.setPool(request.getPool());
-        property.setType(request.getType());
         property.setPrice(request.getPrice());
         property.setDestacado(request.isDestacado());
 

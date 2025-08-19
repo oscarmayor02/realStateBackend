@@ -33,9 +33,11 @@ public class MessageController {
         return messageService.saveMessage(message);
     }
 
-    @GetMapping("/history/{user1Id}/{user2Id}")
-    public List<Message> getChatHistory(@PathVariable Long user1Id, @PathVariable Long user2Id) {
-        return messageService.getChatHistory(user1Id, user2Id);
+    @GetMapping("/history/{user1Id}/{user2Id}/{propertyId}")
+    public List<Message> getChatHistory( @PathVariable Long user1Id,
+                                         @PathVariable Long user2Id,
+                                         @PathVariable Long propertyId) {
+        return messageService.getChatHistory(user1Id, user2Id, propertyId);
     }
 
     @GetMapping("/conversations/{userId}")
@@ -48,11 +50,12 @@ public class MessageController {
             return ResponseEntity.badRequest().build();
         }
     }
-    @PutMapping("/mark-read/{senderId}/{receiverId}")
+    @PutMapping("/mark-read/{senderId}/{receiverId}/{propertyId}")
     public ResponseEntity<Void> markMessagesAsRead(
             @PathVariable Long senderId,
-            @PathVariable Long receiverId) {
-        messageService.markMessagesAsRead(senderId, receiverId);
+            @PathVariable Long receiverId,
+            @PathVariable Long propertyId) {
+        messageService.markMessagesAsRead(senderId, receiverId, propertyId);
         return ResponseEntity.ok().build();
     }
 

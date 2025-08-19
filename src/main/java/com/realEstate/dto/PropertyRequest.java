@@ -1,6 +1,7 @@
 package com.realEstate.dto;
 
 import com.realEstate.model.OperationType;
+import com.realEstate.model.PropertyCategory;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -17,15 +18,14 @@ public class PropertyRequest {
     private Double area;
     private String address;
     private Integer yearBuilt;
-    private String operationType;
-    private Integer parkingSpaces;
+    private OperationType operationType;
+    private boolean parkingSpaces;
     private Integer estrato;
     private Boolean petsAllowed;
     private Boolean balcony;
     private Boolean terrace;
     private Boolean pool;
-    private OperationType type;
-    private String propertyCategory; // Nuevo campo para la categoría de la propiedad
+    private PropertyCategory propertyCategory; // Nuevo campo para la categoría de la propiedad
     private double price;
     private boolean available;
     private Long ownerId;
@@ -51,13 +51,7 @@ public class PropertyRequest {
         return destacado;
     }
 
-    public String getPropertyCategory() {
-        return propertyCategory;
-    }
 
-    public void setPropertyCategory(String propertyCategory) {
-        this.propertyCategory = propertyCategory;
-    }
 
     public void setDestacado(boolean destacado) {
         this.destacado = destacado;
@@ -70,6 +64,14 @@ public class PropertyRequest {
 
     public void setAvailabilityList(List<AvailabilityDTO> availabilityList) {
         this.availabilityList = availabilityList;
+    }
+
+    public boolean isParkingSpaces() {
+        return parkingSpaces;
+    }
+
+    public void setParkingSpaces(boolean parkingSpaces) {
+        this.parkingSpaces = parkingSpaces;
     }
 
     public PropertyRequest() {
@@ -166,21 +168,23 @@ public class PropertyRequest {
         this.yearBuilt = yearBuilt;
     }
 
-    public String getOperationType() {
+    public OperationType getOperationType() {
         return operationType;
     }
 
-    public void setOperationType(String operationType) {
+    public void setOperationType(OperationType operationType) {
         this.operationType = operationType;
     }
 
-    public Integer getParkingSpaces() {
-        return parkingSpaces;
+    public PropertyCategory getPropertyCategory() {
+        return propertyCategory;
     }
 
-    public void setParkingSpaces(Integer parkingSpaces) {
-        this.parkingSpaces = parkingSpaces;
+    public void setPropertyCategory(PropertyCategory propertyCategory) {
+        this.propertyCategory = propertyCategory;
     }
+
+
 
     public Integer getEstrato() {
         return estrato;
@@ -222,13 +226,6 @@ public class PropertyRequest {
         this.pool = pool;
     }
 
-    public OperationType getType() {
-        return type;
-    }
-
-    public void setType(OperationType type) {
-        this.type = type;
-    }
 
     public double getPrice() {
         return price;

@@ -29,7 +29,18 @@ public class Message {
     // Receiver of the message
     @ManyToOne
     private User receiver;
+    private Long propertyId; // 👈 nuevo campo
 
+    // Getters y Setters
+
+
+    public Long getPropertyId() {
+        return propertyId;
+    }
+
+    public void setPropertyId(Long propertyId) {
+        this.propertyId = propertyId;
+    }
     public Long getId() {
         return id;
     }

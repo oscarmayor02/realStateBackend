@@ -49,21 +49,21 @@ public class PropertyController {
             @RequestParam("ciudad") String ciudad,
             @RequestParam("latitude") Double latitude,
             @RequestParam("longitude") Double longitude,
-            @RequestParam("bedrooms") Integer bedrooms,
-            @RequestParam("bathrooms") Integer bathrooms,
-            @RequestParam("area") Double area,
+            @RequestParam(value = "bedrooms" , required = false) Integer bedrooms,
+            @RequestParam(value ="bathrooms", required = false) Integer bathrooms,
+            @RequestParam(value = "area", required = false) Double area,
             @RequestParam("address") String address,
-            @RequestParam("yearBuilt") Integer yearBuilt,
+            @RequestParam(value = "yearBuilt", required = false) Integer yearBuilt,
             @RequestParam("operationType") String operationType,
-            @RequestParam("parkingSpaces") Integer parkingSpaces,
-            @RequestParam("estrato") Integer estrato,
-            @RequestParam("petsAllowed") Boolean petsAllowed,
-            @RequestParam("balcony") Boolean balcony,
-            @RequestParam("terrace") Boolean terrace,
-            @RequestParam("pool") Boolean pool,
-            @RequestParam("type") String type,
-            @RequestParam("price") double price,
-            @RequestParam("available") boolean available,
+            @RequestParam(value = "propertyCategory", required = false) String propertyCategory,
+            @RequestParam(value ="parkingSpaces", required = false) boolean parkingSpaces,
+            @RequestParam(value = "estrato", required = false) Integer estrato,
+            @RequestParam(value ="petsAllowed", required = false) Boolean petsAllowed,
+            @RequestParam(value="balcony", required = false) Boolean balcony,
+            @RequestParam(value= "terrace", required = false) Boolean terrace,
+            @RequestParam(value="pool", required = false) Boolean pool,
+            @RequestParam(value = "price", required = false) double price,
+            @RequestParam(value = "available", required = false) boolean available,
             @RequestParam("ownerId") Long ownerId,
             @RequestParam("images") List<MultipartFile> images,
             @RequestParam(value = "availabilityList", required = false) String availabilityListJson,
@@ -82,14 +82,14 @@ public class PropertyController {
         propertyRequest.setArea(area);
         propertyRequest.setAddress(address);
         propertyRequest.setYearBuilt(yearBuilt);
-        propertyRequest.setOperationType(operationType);
+        propertyRequest.setOperationType(Enum.valueOf(OperationType.class, operationType.toUpperCase()));
+        propertyRequest.setPropertyCategory(Enum.valueOf(PropertyCategory.class,propertyCategory.toUpperCase()));
         propertyRequest.setParkingSpaces(parkingSpaces);
         propertyRequest.setEstrato(estrato);
         propertyRequest.setPetsAllowed(petsAllowed);
         propertyRequest.setBalcony(balcony);
         propertyRequest.setTerrace(terrace);
         propertyRequest.setPool(pool);
-        propertyRequest.setType(Enum.valueOf(OperationType.class, type));
         propertyRequest.setPrice(price);
         propertyRequest.setAvailable(available);
         propertyRequest.setOwnerId(ownerId);
@@ -102,6 +102,7 @@ public class PropertyController {
             );
             propertyRequest.setAvailabilityList(availabilityList);
         }
+
         String adminEmail = adminUser.getUsername();
         Property saved = propertyService.saveProperty(propertyRequest, adminEmail);
         return ResponseEntity.status(HttpStatus.CREATED).body(mapToResponse(saved));
@@ -133,13 +134,13 @@ public class PropertyController {
             @RequestParam("address") String address,
             @RequestParam(value = "yearBuilt", required = false) Integer yearBuilt,
             @RequestParam("operationType") String operationType,
-            @RequestParam(value = "parkingSpaces", required = false) Integer parkingSpaces,
+            @RequestParam(value = "propertyCategory", required = false) String propertyCategory,
+            @RequestParam(value = "parkingSpaces", required = false) boolean parkingSpaces,
             @RequestParam(value = "estrato", required = false) Integer estrato,
             @RequestParam(value = "petsAllowed", required = false) Boolean petsAllowed,
             @RequestParam(value = "balcony", required = false) Boolean balcony,
             @RequestParam(value = "terrace", required = false) Boolean terrace,
             @RequestParam(value = "pool", required = false) Boolean pool,
-            @RequestParam(value = "type", required = false) String type,
             @RequestParam(value = "price", required = false) double price,
             @RequestParam(value = "available", required = false) boolean available,
             @RequestParam(value = "ownerId", required = false) Long ownerId,
@@ -159,14 +160,14 @@ public class PropertyController {
         propertyRequest.setArea(area);
         propertyRequest.setAddress(address);
         propertyRequest.setYearBuilt(yearBuilt);
-        propertyRequest.setOperationType(operationType);
+        propertyRequest.setOperationType(Enum.valueOf(OperationType.class, operationType.toUpperCase()));
+        propertyRequest.setPropertyCategory(Enum.valueOf(PropertyCategory.class,propertyCategory.toUpperCase()));
         propertyRequest.setParkingSpaces(parkingSpaces);
         propertyRequest.setEstrato(estrato);
         propertyRequest.setPetsAllowed(petsAllowed);
         propertyRequest.setBalcony(balcony);
         propertyRequest.setTerrace(terrace);
         propertyRequest.setPool(pool);
-        propertyRequest.setType(Enum.valueOf(OperationType.class, type));
         propertyRequest.setPrice(price);
         propertyRequest.setAvailable(available);
         propertyRequest.setOwnerId(ownerId);
@@ -253,14 +254,14 @@ public class PropertyController {
         response.setArea(property.getArea());
         response.setAddress(property.getAddress());
         response.setYearBuilt(property.getYearBuilt());
-        response.setOperationType(property.getOperationType());
+        response.setOperationType(Enum.valueOf(OperationType.class, property.getOperationType().name()));
+        response.setPropertyTypeName(property.getPropertyTypeName());
         response.setParkingSpaces(property.getParkingSpaces());
         response.setEstrato(property.getEstrato());
         response.setPetsAllowed(property.getPetsAllowed());
         response.setBalcony(property.getBalcony());
         response.setTerrace(property.getTerrace());
         response.setPool(property.getPool());
-        response.setType(property.getType().toString());
         response.setPrice(property.getPrice());
         response.setAvailable(property.getAvailable());
         response.setCreatedAt(property.getCreatedAt());  // <--- Aquí agregas la fecha de creación

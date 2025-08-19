@@ -66,10 +66,22 @@ public class UserServiceImpl implements UserService {
 //                "Hola " + user1.getName() + ", gracias por registrarte en nuestra plataforma."
 //        );
 
-        // Cargar el template HTML y enviar correo
+
+        user1 =  userRepository.save(user1);
+
+        // Enviar correo de bienvenida según rol
         try {
+            String templateArchivo;
+            if (user.getRole() == Role.CLIENT) {
+                templateArchivo = "welcome_client.html";
+            } else if (user.getRole() == Role.HOST) {
+                templateArchivo = "welcome_host.html";
+            } else {
+                templateArchivo = "welcome_client.html"; // fallback
+            }
+
             Map<String, String> variables = Map.of("nombre", user1.getName());
-            String contenidoHtml = emailServiceImpl.cargarTemplate("welcome.html", variables);
+            String contenidoHtml = emailServiceImpl.cargarTemplate(templateArchivo, variables);
 
             emailServiceImpl.enviarCorreoHtml(
                     user1.getEmail(),
@@ -78,10 +90,9 @@ public class UserServiceImpl implements UserService {
             );
         } catch (IOException e) {
             e.printStackTrace();
-            // Puedes decidir si lanzar excepción o solo loguear el error aquí
+            // Puedes loguear el error o decidir si lanzar excepción
         }
-
-        return userRepository.save(user1);
+        return user1;
 
     }
 
