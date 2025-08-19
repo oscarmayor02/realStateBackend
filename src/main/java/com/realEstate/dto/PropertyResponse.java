@@ -29,7 +29,6 @@ public class PropertyResponse {
     private Boolean balcony;
     private Boolean terrace;
     private Boolean pool;
-    private String propertyCategory;
     private double price;
     private boolean available;
     private List<AvailabilityDTO> availabilityList;
@@ -50,13 +49,7 @@ public class PropertyResponse {
         this.operationType = operationType;
     }
 
-    public String getPropertyCategory() {
-        return propertyCategory;
-    }
 
-    public void setPropertyCategory(String propertyCategory) {
-        this.propertyCategory = propertyCategory;
-    }
 
     public boolean isDestacado() {
         return destacado;
