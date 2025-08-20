@@ -1,4 +1,5 @@
 package com.realEstate.controller;
+
 import com.realEstate.dto.ConversationDTO;
 import com.realEstate.model.ChatMessage;
 import com.realEstate.model.Message;
@@ -28,38 +29,46 @@ public class WebSocketMessageController {
     private MessageService messageService;
 
     @Autowired
-    private UserRepository userRepository; // <-- Agregado
+    private UserRepository userRepository;
+
+    @Autowired
+    private PropertyRepository propertyRepository;
 
     @Autowired
     private EmailServiceImpl emailServiceImpl;
+
     @MessageMapping("/chat")
     public void send(ChatMessage chatMessage) {
+        // ✅ Obtener sender y receiver desde BD
         User sender = userRepository.findById(chatMessage.getSenderId())
                 .orElseThrow(() -> new RuntimeException("Usuario emisor no encontrado"));
 
         User receiver = userRepository.findById(chatMessage.getReceiverId())
                 .orElseThrow(() -> new RuntimeException("Usuario receptor no encontrado"));
 
-        Property property = new Property();
-        property.setId(chatMessage.getPropertyId()); // 👈 setear propiedad solo por id
+        // ✅ Buscar la propiedad en la BD
+        Property property = propertyRepository.findById(chatMessage.getPropertyId())
+                .orElseThrow(() -> new RuntimeException("Propiedad no encontrada"));
 
+        // ✅ Crear y guardar el mensaje en BD
+        Message message = new Message();
+        message.setContent(chatMessage.getContent());
+        message.setTimestamp(LocalDateTime.now());
+        message.setSender(sender);
+        message.setReceiver(receiver);
+        message.setRead(false);
+        message.setProperty(property);
 
-        Message savedMessage = new Message();
-        savedMessage.setContent(chatMessage.getContent());
-        savedMessage.setTimestamp(LocalDateTime.now());
-        savedMessage.setSender(sender);
-        savedMessage.setReceiver(receiver);
-        savedMessage.setRead(false);
-        savedMessage.setProperty(property); // 👈 asignar propiedad
-        messageService.saveMessage(savedMessage);
+        Message savedMessage = messageService.saveMessage(message); // <- guardado real
 
         // ✅ Enviar correo HTML al receptor del mensaje
         try {
             Map<String, String> variables = Map.of(
                     "nombre", receiver.getName(),
-                    "mensaje", chatMessage.getContent(),
+                    "mensaje", savedMessage.getContent(),
                     "emisor", sender.getName()
             );
+
             String contenidoHtml = emailServiceImpl.cargarTemplate("chat-message.html", variables);
 
             emailServiceImpl.enviarCorreoHtml(
@@ -70,25 +79,26 @@ public class WebSocketMessageController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // Enviar mensaje al receptor
+
+        // ✅ Notificar mensaje en tiempo real al receptor
         ChatMessage frontendMsg = new ChatMessage();
         frontendMsg.setSenderId(sender.getId());
         frontendMsg.setReceiverId(receiver.getId());
         frontendMsg.setContent(savedMessage.getContent());
         frontendMsg.setTimestamp(savedMessage.getTimestamp().toString());
-        frontendMsg.setRead(false);
-        frontendMsg.setPropertyId(property.getId()); // 👈 incluir propertyId
+        frontendMsg.setRead(savedMessage.isRead());
+        frontendMsg.setPropertyId(property.getId());
 
         messagingTemplate.convertAndSend(
                 "/topic/messages/" + receiver.getId(),
                 frontendMsg
         );
 
-        // 🔔 Nueva lógica: enviar conversación enriquecida
+        // ✅ Enviar conversación actualizada
         List<ConversationDTO> updatedList = messageService.getDetailedUserConversations(receiver.getId());
 
         ConversationDTO updatedSender = updatedList.stream()
-                .filter(conv -> conv.getId().equals(sender.getId()) &&conv.getPropertyId().equals(property.getId()))
+                .filter(conv -> conv.getId().equals(sender.getId()) && conv.getPropertyId().equals(property.getId()))
                 .findFirst()
                 .orElse(null);
 
@@ -99,9 +109,4 @@ public class WebSocketMessageController {
             );
         }
     }
-
-
-
-
-
 }
