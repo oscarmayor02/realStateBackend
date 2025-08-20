@@ -30,6 +30,7 @@ public class MessageController {
     @PostMapping
     public Message sendMessage(@RequestBody Message message) {
         // Saves the message received in the request body and returns it
+        System.out.println("Received message: " + message.getContent());
         return messageService.saveMessage(message);
     }
 
