@@ -12,13 +12,14 @@ public class ConversationDTO {
     private LocalDateTime timestamp;
     private Long propertyId;
     private String propertyTitle;
+
     public ConversationDTO(
-            Long id,
+            Long id,                // JPA devuelve Long para IDs
             String name,
             String email,
-            Long unreadCount,
+            Long unreadCount,       // COUNT() devuelve Long
             String lastMessage,
-            java.sql.Timestamp timestamp,
+            LocalDateTime timestamp,
             Long propertyId,
             String propertyTitle
     ) {
@@ -27,7 +28,7 @@ public class ConversationDTO {
         this.email = email;
         this.unreadCount = unreadCount != null ? unreadCount.intValue() : 0;
         this.lastMessage = lastMessage;
-        this.timestamp = timestamp != null ? timestamp.toLocalDateTime() : null;
+        this.timestamp = timestamp;
         this.propertyId = propertyId;
         this.propertyTitle = propertyTitle;
     }

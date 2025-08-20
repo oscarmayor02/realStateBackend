@@ -57,7 +57,7 @@ public class WebSocketMessageController {
                     .orElseThrow(() -> new RuntimeException("Propiedad no encontrada"));
         }
         savedMessage.setProperty(property);
-
+        System.out.println("chat" + chatMessage.getContent() + "contenido" + savedMessage );
         messageService.saveMessage(savedMessage);
 
         // ✅ Enviar correo HTML al receptor del mensaje
