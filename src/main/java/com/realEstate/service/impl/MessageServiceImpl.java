@@ -34,8 +34,8 @@
         }
 
         @Override
-        public void markMessagesAsRead(Long senderId, Long receiverId) {
-            messageRepository.markMessagesAsRead(senderId, receiverId);
+        public void markMessagesAsRead(Long senderId, Long receiverId, Long propertyId) {
+            messageRepository.markMessagesAsRead(senderId, receiverId, propertyId);
         }
 
         @Override

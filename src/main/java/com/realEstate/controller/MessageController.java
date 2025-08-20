@@ -1,8 +1,8 @@
 package com.realEstate.controller;
+
 import com.realEstate.dto.ConversationDTO;
 import com.realEstate.dto.UserDTO;
 import com.realEstate.model.Message;
-import com.realEstate.model.User;
 import com.realEstate.repository.MessageRepository;
 import com.realEstate.service.MessageService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,23 +13,18 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-// Sets the base URL path for all endpoints in this controller
 @RequestMapping("/api/messages")
 public class MessageController {
 
-    // Injects the MessageService to handle business logic related to messages
     @Autowired
     private MessageService messageService;
 
     @Autowired
     private MessageRepository messageRepository;
 
-    // Documents the endpoint for sending a message
     @Operation(summary = "Send a message")
-    // Maps HTTP POST requests to /api/messages
     @PostMapping
     public Message sendMessage(@RequestBody Message message) {
-        // Saves the message received in the request body and returns it
         return messageService.saveMessage(message);
     }
 
@@ -38,15 +33,15 @@ public class MessageController {
             @PathVariable Long user1Id,
             @PathVariable Long user2Id,
             @PathVariable Long propertyId) {
-        return messageService.getChatHistory(user1Id, user2Id,propertyId).stream()
+        return messageService.getChatHistory(user1Id, user2Id, propertyId).stream()
                 .filter(m -> m.getProperty() != null && m.getProperty().getId().equals(propertyId))
                 .peek(m -> {
-                    // Enviamos al frontend el nombre de la propiedad
                     if (m.getProperty() != null) {
-                        m.setPropertyName(m.getProperty().getTitle()); // <-- esto es solo para mostrar
+                        m.setPropertyName(m.getProperty().getTitle());
                     }
                 })
-                .toList();    }
+                .toList();
+    }
 
     @GetMapping("/conversations/{userId}")
     public ResponseEntity<List<UserDTO>> getConversations(@PathVariable Long userId) {
@@ -58,11 +53,13 @@ public class MessageController {
             return ResponseEntity.badRequest().build();
         }
     }
-    @PutMapping("/mark-read/{senderId}/{receiverId}")
+
+    @PutMapping("/mark-read/{senderId}/{receiverId}/{propertyId}")
     public ResponseEntity<Void> markMessagesAsRead(
             @PathVariable Long senderId,
-            @PathVariable Long receiverId) {
-        messageService.markMessagesAsRead(senderId, receiverId);
+            @PathVariable Long receiverId,
+            @PathVariable Long propertyId) {
+        messageService.markMessagesAsRead(senderId, receiverId, propertyId);
         return ResponseEntity.ok().build();
     }
 
@@ -76,6 +73,4 @@ public class MessageController {
             return ResponseEntity.badRequest().build();
         }
     }
-
-
 }
