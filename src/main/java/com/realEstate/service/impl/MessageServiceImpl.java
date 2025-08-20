@@ -21,13 +21,12 @@
         // Save message to the database
         @Override
         public Message saveMessage(Message message) {
-            System.out.println("Saving message: " + message.getContent());
             return messageRepository.save(message);
         }
 
         @Override
-        public List<Message> getChatHistory(Long user1Id, Long user2Id, Long propertyId) {
-            return messageRepository.findChatHistory(user1Id, user2Id,  propertyId);
+        public List<Message> getChatHistory(Long user1Id, Long user2Id) {
+            return messageRepository.findChatHistory(user1Id, user2Id);
 
         }
         @Override
@@ -36,8 +35,8 @@
         }
 
         @Override
-        public void markMessagesAsRead(Long senderId, Long receiverId, Long propertyId) {
-            messageRepository.markMessagesAsRead(senderId, receiverId, propertyId);
+        public void markMessagesAsRead(Long senderId, Long receiverId) {
+            messageRepository.markMessagesAsRead(senderId, receiverId);
         }
 
         @Override

@@ -30,15 +30,12 @@ public class MessageController {
     @PostMapping
     public Message sendMessage(@RequestBody Message message) {
         // Saves the message received in the request body and returns it
-        System.out.println("Received message: " + message.getContent());
         return messageService.saveMessage(message);
     }
 
-    @GetMapping("/history/{user1Id}/{user2Id}/{propertyId}")
-    public List<Message> getChatHistory( @PathVariable Long user1Id,
-                                         @PathVariable Long user2Id,
-                                         @PathVariable Long propertyId) {
-        return messageService.getChatHistory(user1Id, user2Id, propertyId);
+    @GetMapping("/history/{user1Id}/{user2Id}")
+    public List<Message> getChatHistory(@PathVariable Long user1Id, @PathVariable Long user2Id) {
+        return messageService.getChatHistory(user1Id, user2Id);
     }
 
     @GetMapping("/conversations/{userId}")
@@ -51,12 +48,11 @@ public class MessageController {
             return ResponseEntity.badRequest().build();
         }
     }
-    @PutMapping("/mark-read/{senderId}/{receiverId}/{propertyId}")
+    @PutMapping("/mark-read/{senderId}/{receiverId}")
     public ResponseEntity<Void> markMessagesAsRead(
             @PathVariable Long senderId,
-            @PathVariable Long receiverId,
-            @PathVariable Long propertyId) {
-        messageService.markMessagesAsRead(senderId, receiverId, propertyId);
+            @PathVariable Long receiverId) {
+        messageService.markMessagesAsRead(senderId, receiverId);
         return ResponseEntity.ok().build();
     }
 

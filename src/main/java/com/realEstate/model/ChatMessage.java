@@ -6,18 +6,7 @@ public class ChatMessage {
     private String content;
     private String timestamp;
     private boolean read = false;
-    private Long propertyId; // 👈 nuevo campo
-
     // Getters y Setters
-
-
-    public Long getPropertyId() {
-        return propertyId;
-    }
-
-    public void setPropertyId(Long propertyId) {
-        this.propertyId = propertyId;
-    }
 
     public boolean isRead() {
         return read;
