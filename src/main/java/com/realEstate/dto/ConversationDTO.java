@@ -9,21 +9,41 @@ public class ConversationDTO {
     private int unreadCount;
     private String lastMessage;
     private LocalDateTime timestamp;
+    private Long propertyId;     // 👈 agregado
+    private String propertyTitle; // 👈 opcional si quieres mostrar el nombre de la propiedad
 
-    public ConversationDTO(Long id, String name, String email, Number unreadCount, String lastMessage, LocalDateTime timestamp) {
+    public ConversationDTO(Long id, String name, String email, Number unreadCount,
+                           String lastMessage, LocalDateTime timestamp,
+                           Long propertyId, String propertyTitle) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.unreadCount = (unreadCount != null) ? unreadCount.intValue() : 0;
         this.lastMessage = lastMessage;
         this.timestamp = timestamp;
+        this.propertyId = propertyId;
+        this.propertyTitle = propertyTitle;
     }
-
     public ConversationDTO() {}
 
-
-
     // Getters y setters
+
+    public String getPropertyTitle() {
+        return propertyTitle;
+    }
+
+    public void setPropertyTitle(String propertyTitle) {
+        this.propertyTitle = propertyTitle;
+    }
+
+    public Long getPropertyId() {
+        return propertyId;
+    }
+
+    public void setPropertyId(Long propertyId) {
+        this.propertyId = propertyId;
+    }
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
