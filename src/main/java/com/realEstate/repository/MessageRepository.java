@@ -50,25 +50,26 @@
         void markMessagesAsRead(@Param("senderId") Long senderId, @Param("receiverId") Long receiverId, @Param("propertyId") Long propertyId);
 
         // --- Conversaciones detalladas con último mensaje por chat y propiedad ---
-        @Query(value = """
-    SELECT 
-        CASE WHEN m.sender_id = :userId THEN m.receiver_id ELSE m.sender_id END as id,
-        CASE WHEN m.sender_id = :userId THEN u_receiver.name ELSE u_sender.name END as name,
-        CASE WHEN m.sender_id = :userId THEN u_receiver.email ELSE u_sender.email END as email,
-        SUM(CASE WHEN m.read = false AND m.receiver_id = :userId THEN 1 ELSE 0 END) as unreadCount,
-        m.content as lastMessage,
-        m.timestamp as timestamp,
-        m.property_id as propertyId,
-        p.title as propertyTitle
-    FROM messages m
-    JOIN users u_sender ON u_sender.id = m.sender_id
-    JOIN users u_receiver ON u_receiver.id = m.receiver_id
-    JOIN properties p ON p.id = m.property_id
-    WHERE m.sender_id = :userId OR m.receiver_id = :userId
-    GROUP BY id, name, email, m.content, m.timestamp, m.property_id, p.title
-    ORDER BY m.timestamp DESC
-""", nativeQuery = true)
+        @Query("SELECT new com.realEstate.dto.ConversationDTO(" +
+                "m.sender.id, " +
+                "m.sender.name, " +
+                "m.sender.email, " +
+                "SUM(CASE WHEN m.read = false AND m.receiver.id = :userId THEN 1 ELSE 0 END), " +
+                "m.content, " +
+                "m.timestamp, " +
+                "m.property.id, " +
+                "m.property.title) " +
+                "FROM Message m " +
+                "WHERE m.id IN (" +
+                "   SELECT MAX(m2.id) FROM Message m2 " +
+                "   WHERE m2.sender.id = :userId OR m2.receiver.id = :userId " +
+                "   GROUP BY m2.property.id, " +
+                "            CASE WHEN m2.sender.id = :userId THEN m2.receiver.id ELSE m2.sender.id END" +
+                ") " +
+                "GROUP BY m.sender.id, m.sender.name, m.sender.email, m.content, m.timestamp, m.property.id, m.property.title " +
+                "ORDER BY m.timestamp DESC")
         List<ConversationDTO> findDetailedConversations(@Param("userId") Long userId);
+
 
 
     }
