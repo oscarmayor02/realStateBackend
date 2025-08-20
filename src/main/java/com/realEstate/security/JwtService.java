@@ -29,7 +29,6 @@ public class JwtService {
         claims.put("role", user.getRole().name());
         claims.put("idUser", user.getId()); // Agrega el id como claim
         claims.put("name", user.getName()); // Agrega el nombre como claim
-        System.out.println("Nombre en el token: " + user.getName());
         return Jwts.builder()
                 .setClaims(claims)
 
