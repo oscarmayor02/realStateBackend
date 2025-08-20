@@ -21,6 +21,7 @@
         // Save message to the database
         @Override
         public Message saveMessage(Message message) {
+            System.out.println("Saving message: " + message.getContent());
             return messageRepository.save(message);
         }
 

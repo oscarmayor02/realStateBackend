@@ -40,9 +40,6 @@ public class WebSocketMessageController {
     @MessageMapping("/chat")
     public void send(ChatMessage chatMessage) {
         try {
-            System.out.println("Recibiendo mensaje: " + chatMessage.getContent());
-
-            // ✅ Convertir IDs a Long
             Long senderId = Long.valueOf(chatMessage.getSenderId());
             Long receiverId = Long.valueOf(chatMessage.getReceiverId());
             Long propertyId = chatMessage.getPropertyId() != null ? Long.valueOf(chatMessage.getPropertyId()) : null;
@@ -97,7 +94,7 @@ public class WebSocketMessageController {
             frontendMsg.setTimestamp(savedMessage.getTimestamp().toString());
             frontendMsg.setRead(false);
             frontendMsg.setPropertyId(propertyId);
-
+            System.out.println("Enviando mensaje al front: " + frontendMsg);
             messagingTemplate.convertAndSend(
                     "/topic/messages/" + receiverId,
                     frontendMsg
