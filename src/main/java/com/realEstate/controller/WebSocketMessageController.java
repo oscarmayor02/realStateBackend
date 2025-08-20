@@ -39,11 +39,18 @@ public class WebSocketMessageController {
 
     @MessageMapping("/chat")
     public void send(ChatMessage chatMessage) {
+        System.out.println("Recibiendo mensaje: " + chatMessage.getContent());
         User sender = userRepository.findById(chatMessage.getSenderId())
                 .orElseThrow(() -> new RuntimeException("Usuario emisor no encontrado"));
 
         User receiver = userRepository.findById(chatMessage.getReceiverId())
                 .orElseThrow(() -> new RuntimeException("Usuario receptor no encontrado"));
+
+        Property property = null;
+        if (chatMessage.getPropertyId() != null) {
+            property = propertyRepository.findById(Long.valueOf(chatMessage.getPropertyId()))
+                    .orElseThrow(() -> new RuntimeException("Propiedad no encontrada"));
+        }
 
         Message savedMessage = new Message();
         savedMessage.setContent(chatMessage.getContent());
@@ -51,7 +58,6 @@ public class WebSocketMessageController {
         savedMessage.setSender(sender);
         savedMessage.setReceiver(receiver);
         savedMessage.setRead(false);
-        Property property = null;
         if (chatMessage.getPropertyId() != null) {
             property = propertyRepository.findById(chatMessage.getPropertyId())
                     .orElseThrow(() -> new RuntimeException("Propiedad no encontrada"));
@@ -84,6 +90,7 @@ public class WebSocketMessageController {
         frontendMsg.setContent(savedMessage.getContent());
         frontendMsg.setTimestamp(savedMessage.getTimestamp().toString());
         frontendMsg.setRead(false);
+        frontendMsg.setPropertyId(savedMessage.getProperty() != null ? savedMessage.getProperty().getId() : null);
 
         messagingTemplate.convertAndSend(
                 "/topic/messages/" + receiver.getId(),
