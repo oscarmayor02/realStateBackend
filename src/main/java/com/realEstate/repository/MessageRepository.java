@@ -42,8 +42,17 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE Message m SET m.read = true WHERE m.sender.id = :senderId AND m.receiver.id = :receiverId AND m.read = false")
-    void markMessagesAsRead(@Param("senderId") Long senderId, @Param("receiverId") Long receiverId);
+    @Query("UPDATE Message m SET m.read = true " +
+            "WHERE m.sender.id = :senderId " +
+            "AND m.receiver.id = :receiverId " +
+            "AND m.property.id = :propertyId " +
+            "AND m.read = false")
+    void markMessagesAsRead(
+            @Param("senderId") Long senderId,
+            @Param("receiverId") Long receiverId,
+            @Param("propertyId") Long propertyId
+    );
+
 
     @Query("SELECT new com.realEstate.dto.ConversationDTO(" +
             "c.id, " +
