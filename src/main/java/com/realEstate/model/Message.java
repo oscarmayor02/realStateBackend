@@ -14,7 +14,11 @@ public class Message {
     private String content;
 
     private LocalDateTime timestamp;
+    @Transient
+    private String propertyName;
 
+    public String getPropertyName() { return propertyName; }
+    public void setPropertyName(String propertyName) { this.propertyName = propertyName; }
     @Column(name = "read", nullable = false)
     private boolean read = false;
 

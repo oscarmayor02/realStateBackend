@@ -17,12 +17,14 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     List<Message> findBySenderIdAndReceiverIdOrReceiverIdAndSenderIdOrderByTimestampAsc(
             Long senderId1, Long receiverId1, Long senderId2, Long receiverId2
     );
-
     @Query("SELECT m FROM Message m WHERE " +
-           "(m.sender.id = :user1Id AND m.receiver.id = :user2Id) OR " +
-           "(m.sender.id = :user2Id AND m.receiver.id = :user1Id) " +
-           "ORDER BY m.timestamp ASC")
-    List<Message> findChatHistory(@Param("user1Id") Long user1Id, @Param("user2Id") Long user2Id);
+            "((m.sender.id = :user1Id AND m.receiver.id = :user2Id) OR " +
+            " (m.sender.id = :user2Id AND m.receiver.id = :user1Id)) " +
+            "AND m.property.id = :propertyId " +   // 👈 filtro por propiedad
+            "ORDER BY m.timestamp ASC")
+    List<Message> findChatHistory(@Param("user1Id") Long user1Id,
+                                  @Param("user2Id") Long user2Id,
+                                  @Param("propertyId") Long propertyId);
 
     @Query("SELECT new com.realEstate.dto.UserDTO(" +
            "c.id, " +
@@ -44,16 +46,20 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     void markMessagesAsRead(@Param("senderId") Long senderId, @Param("receiverId") Long receiverId);
 
     @Query("SELECT new com.realEstate.dto.ConversationDTO(" +
-           "c.id, " +
-           "c.name, " +
-           "c.email, " +
-           "COALESCE(SUM(CASE WHEN m.read = false AND m.receiver.id = :userId THEN 1 ELSE 0 END), 0), " +
-           "MAX(m.content), " +
-           "MAX(m.timestamp)) " +
-           "FROM Message m " +
-           "JOIN User c ON (c.id = CASE WHEN m.sender.id = :userId THEN m.receiver.id ELSE m.sender.id END) " +
-           "WHERE m.sender.id = :userId OR m.receiver.id = :userId " +
-           "GROUP BY c.id, c.name, c.email " +
-           "ORDER BY MAX(m.timestamp) DESC")
+            "c.id, " +
+            "c.name, " +
+            "c.email, " +
+            "COALESCE(SUM(CASE WHEN m.read = false AND m.receiver.id = :userId THEN 1 ELSE 0 END), 0), " +
+            "MAX(m.content), " +
+            "MAX(m.timestamp), " +
+            "p.id, " +              // 👈 agregado
+            "p.title) " +           // 👈 agregado (suponiendo que Property tiene campo title)
+            "FROM Message m " +
+            "JOIN User c ON (c.id = CASE WHEN m.sender.id = :userId THEN m.receiver.id ELSE m.sender.id END) " +
+            "JOIN m.property p " +  // 👈 join con propiedad
+            "WHERE m.sender.id = :userId OR m.receiver.id = :userId " +
+            "GROUP BY c.id, c.name, c.email, p.id, p.title " +  // 👈 agrupar también por propiedad
+            "ORDER BY MAX(m.timestamp) DESC")
     List<ConversationDTO> findDetailedConversations(@Param("userId") Long userId);
+
 }

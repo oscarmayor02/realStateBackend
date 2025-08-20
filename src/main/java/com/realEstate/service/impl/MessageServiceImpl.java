@@ -25,9 +25,8 @@
         }
 
         @Override
-        public List<Message> getChatHistory(Long user1Id, Long user2Id) {
-            return messageRepository.findChatHistory(user1Id, user2Id);
-
+        public List<Message> getChatHistory(Long user1Id, Long user2Id, Long propertyId) {
+            return messageRepository.findChatHistory(user1Id, user2Id, propertyId);
         }
         @Override
         public List<UserDTO> getUserConversations(Long userId) {

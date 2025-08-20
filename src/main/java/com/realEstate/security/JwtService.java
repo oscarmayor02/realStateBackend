@@ -57,7 +57,6 @@ public class JwtService {
 
     // Parses the token and retrieves all claims
     private Claims extractAllClaims(String token) {
-        System.out.println("Nombre en el token: " + token);
         return Jwts.parser() // Creates a JWT parser
                 .setSigningKey(secret) // Sets the signing key for validation
                 .parseClaimsJws(token) // Parses the token

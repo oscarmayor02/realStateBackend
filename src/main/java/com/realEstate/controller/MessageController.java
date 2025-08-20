@@ -33,10 +33,20 @@ public class MessageController {
         return messageService.saveMessage(message);
     }
 
-    @GetMapping("/history/{user1Id}/{user2Id}")
-    public List<Message> getChatHistory(@PathVariable Long user1Id, @PathVariable Long user2Id) {
-        return messageService.getChatHistory(user1Id, user2Id);
-    }
+    @GetMapping("/history/{user1Id}/{user2Id}/{propertyId}")
+    public List<Message> getChatHistory(
+            @PathVariable Long user1Id,
+            @PathVariable Long user2Id,
+            @PathVariable Long propertyId) {
+        return messageService.getChatHistory(user1Id, user2Id,propertyId).stream()
+                .filter(m -> m.getProperty() != null && m.getProperty().getId().equals(propertyId))
+                .peek(m -> {
+                    // Enviamos al frontend el nombre de la propiedad
+                    if (m.getProperty() != null) {
+                        m.setPropertyName(m.getProperty().getTitle()); // <-- esto es solo para mostrar
+                    }
+                })
+                .toList();    }
 
     @GetMapping("/conversations/{userId}")
     public ResponseEntity<List<UserDTO>> getConversations(@PathVariable Long userId) {

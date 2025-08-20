@@ -2,7 +2,9 @@ package com.realEstate.controller;
 import com.realEstate.dto.ConversationDTO;
 import com.realEstate.model.ChatMessage;
 import com.realEstate.model.Message;
+import com.realEstate.model.Property;
 import com.realEstate.model.User;
+import com.realEstate.repository.PropertyRepository;
 import com.realEstate.repository.UserRepository;
 import com.realEstate.service.MessageService;
 import com.realEstate.service.impl.EmailServiceImpl;
@@ -38,12 +40,17 @@ public class WebSocketMessageController {
         User receiver = userRepository.findById(chatMessage.getReceiverId())
                 .orElseThrow(() -> new RuntimeException("Usuario receptor no encontrado"));
 
+        Property property = new Property();
+        property.setId(chatMessage.getPropertyId()); // 👈 setear propiedad solo por id
+
+
         Message savedMessage = new Message();
         savedMessage.setContent(chatMessage.getContent());
         savedMessage.setTimestamp(LocalDateTime.now());
         savedMessage.setSender(sender);
         savedMessage.setReceiver(receiver);
         savedMessage.setRead(false);
+        savedMessage.setProperty(property); // 👈 asignar propiedad
         messageService.saveMessage(savedMessage);
 
         // ✅ Enviar correo HTML al receptor del mensaje
@@ -70,6 +77,7 @@ public class WebSocketMessageController {
         frontendMsg.setContent(savedMessage.getContent());
         frontendMsg.setTimestamp(savedMessage.getTimestamp().toString());
         frontendMsg.setRead(false);
+        frontendMsg.setPropertyId(property.getId()); // 👈 incluir propertyId
 
         messagingTemplate.convertAndSend(
                 "/topic/messages/" + receiver.getId(),
@@ -80,7 +88,7 @@ public class WebSocketMessageController {
         List<ConversationDTO> updatedList = messageService.getDetailedUserConversations(receiver.getId());
 
         ConversationDTO updatedSender = updatedList.stream()
-                .filter(conv -> conv.getId().equals(sender.getId()))
+                .filter(conv -> conv.getId().equals(sender.getId()) &&conv.getPropertyId().equals(property.getId()))
                 .findFirst()
                 .orElse(null);
 
