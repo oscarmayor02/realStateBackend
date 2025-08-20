@@ -39,18 +39,18 @@ public class WebSocketMessageController {
 
     @MessageMapping("/chat")
     public void send(ChatMessage chatMessage) {
-        // ✅ Obtener sender y receiver desde BD
+        // Obtener sender y receiver desde BD
         User sender = userRepository.findById(chatMessage.getSenderId())
                 .orElseThrow(() -> new RuntimeException("Usuario emisor no encontrado"));
 
         User receiver = userRepository.findById(chatMessage.getReceiverId())
                 .orElseThrow(() -> new RuntimeException("Usuario receptor no encontrado"));
 
-        // ✅ Buscar la propiedad en la BD
+        // Buscar la propiedad en la BD
         Property property = propertyRepository.findById(chatMessage.getPropertyId())
                 .orElseThrow(() -> new RuntimeException("Propiedad no encontrada"));
 
-        // ✅ Crear y guardar el mensaje en BD
+        // Crear y guardar el mensaje en BD
         Message message = new Message();
         message.setContent(chatMessage.getContent());
         message.setTimestamp(LocalDateTime.now());
@@ -59,9 +59,9 @@ public class WebSocketMessageController {
         message.setRead(false);
         message.setProperty(property);
 
-        Message savedMessage = messageService.saveMessage(message); // <- guardado real
+        Message savedMessage = messageService.saveMessage(message);
 
-        // ✅ Enviar correo HTML al receptor del mensaje
+        // Enviar correo HTML al receptor del mensaje
         try {
             Map<String, String> variables = Map.of(
                     "nombre", receiver.getName(),
@@ -80,7 +80,7 @@ public class WebSocketMessageController {
             e.printStackTrace();
         }
 
-        // ✅ Notificar mensaje en tiempo real al receptor
+        // Notificar mensaje en tiempo real al receptor
         ChatMessage frontendMsg = new ChatMessage();
         frontendMsg.setSenderId(sender.getId());
         frontendMsg.setReceiverId(receiver.getId());
@@ -94,7 +94,7 @@ public class WebSocketMessageController {
                 frontendMsg
         );
 
-        // ✅ Enviar conversación actualizada
+        // Enviar conversación actualizada
         List<ConversationDTO> updatedList = messageService.getDetailedUserConversations(receiver.getId());
 
         ConversationDTO updatedSender = updatedList.stream()
