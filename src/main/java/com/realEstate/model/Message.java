@@ -25,10 +25,12 @@ public class Message {
 
     @ManyToOne
     @JoinColumn(name = "sender_id")
+    @JsonIgnoreProperties({"messagesSent", "messagesReceived", "password"}) // Ajusta según tu User
     private User sender;
 
     @ManyToOne
     @JoinColumn(name = "receiver_id")
+    @JsonIgnoreProperties({"messagesSent", "messagesReceived", "password"})
     private User receiver;
 
     @ManyToOne
