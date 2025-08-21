@@ -1,5 +1,6 @@
 package com.realEstate.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -32,6 +33,7 @@ public class Message {
 
     @ManyToOne
     @JoinColumn(name = "property_id")
+    @JsonIgnoreProperties({"messages", "host"})
     private Property property;
 
     // Getters y Setters
