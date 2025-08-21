@@ -28,12 +28,12 @@ public class MessageController {
         return messageService.saveMessage(message);
     }
 
-    @GetMapping("/history/{user1Id}/{user2Id}/{propertyId}")
-    public List<Message> getChatHistory(
+    @GetMapping(value = "/history/{user1Id}/{user2Id}/{propertyId}", produces = "application/json")
+    public ResponseEntity<List<Message>> getChatHistory(
             @PathVariable Long user1Id,
             @PathVariable Long user2Id,
             @PathVariable Long propertyId) {
-        return messageService.getChatHistory(user1Id, user2Id, propertyId).stream()
+        List<Message> messages = messageService.getChatHistory(user1Id, user2Id, propertyId).stream()
                 .filter(m -> m.getProperty() != null && m.getProperty().getId().equals(propertyId))
                 .peek(m -> {
                     if (m.getProperty() != null) {
@@ -41,7 +41,9 @@ public class MessageController {
                     }
                 })
                 .toList();
+        return ResponseEntity.ok(messages);
     }
+
 
     @GetMapping("/conversations/{userId}")
     public ResponseEntity<List<UserDTO>> getConversations(@PathVariable Long userId) {
