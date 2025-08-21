@@ -1,5 +1,6 @@
 package com.realEstate.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -25,17 +26,17 @@ public class Message {
 
     @ManyToOne
     @JoinColumn(name = "sender_id")
-    @JsonIgnoreProperties({"messagesSent", "messagesReceived", "password"}) // Ajusta según tu User
+    @JsonIgnore
     private User sender;
 
     @ManyToOne
     @JoinColumn(name = "receiver_id")
-    @JsonIgnoreProperties({"messagesSent", "messagesReceived", "password"})
+    @JsonIgnore
     private User receiver;
 
     @ManyToOne
     @JoinColumn(name = "property_id")
-    @JsonIgnoreProperties({"messages", "host"})
+    @JsonIgnore
     private Property property;
 
     // Getters y Setters
