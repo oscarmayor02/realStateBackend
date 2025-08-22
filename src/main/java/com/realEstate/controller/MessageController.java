@@ -5,6 +5,7 @@ import com.realEstate.dto.UserDTO;
 import com.realEstate.model.Message;
 import com.realEstate.repository.MessageRepository;
 import com.realEstate.service.MessageService;
+import com.realEstate.service.impl.MessageServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,8 @@ public class MessageController {
     private MessageService messageService;
 
     @Autowired
+    private MessageServiceImpl messageServiceImpl;
+    @Autowired
     private MessageRepository messageRepository;
 
     @Operation(summary = "Send a message")
@@ -33,6 +36,10 @@ public class MessageController {
             @PathVariable Long user1Id,
             @PathVariable Long user2Id,
             @PathVariable Long propertyId) {
+        // Verificar que user1Id o user2Id es dueño de la propiedad o participante de la conversación
+        if (!messageServiceImpl.canAccessChat(user1Id, user2Id, propertyId)) {
+            return ResponseEntity.status(403).build();
+        }
         List<Message> messages = messageService.getChatHistory(user1Id, user2Id, propertyId).stream()
                 .filter(m -> m.getProperty() != null && m.getProperty().getId().equals(propertyId))
                 .peek(m -> {
