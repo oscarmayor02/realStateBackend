@@ -39,18 +39,13 @@ public class WebSocketMessageController {
 
     @MessageMapping("/chat")
     public void send(ChatMessage chatMessage) {
-        // Obtener sender y receiver desde BD
         User sender = userRepository.findById(chatMessage.getSenderId())
                 .orElseThrow(() -> new RuntimeException("Usuario emisor no encontrado"));
-
         User receiver = userRepository.findById(chatMessage.getReceiverId())
                 .orElseThrow(() -> new RuntimeException("Usuario receptor no encontrado"));
-
-        // Buscar la propiedad en la BD
         Property property = propertyRepository.findById(chatMessage.getPropertyId())
                 .orElseThrow(() -> new RuntimeException("Propiedad no encontrada"));
 
-        // Crear y guardar el mensaje en BD
         Message message = new Message();
         message.setContent(chatMessage.getContent());
         message.setTimestamp(LocalDateTime.now());
@@ -61,26 +56,18 @@ public class WebSocketMessageController {
 
         Message savedMessage = messageService.saveMessage(message);
 
-        // Enviar correo HTML al receptor del mensaje
         try {
             Map<String, String> variables = Map.of(
                     "nombre", receiver.getName(),
                     "mensaje", savedMessage.getContent(),
                     "emisor", sender.getName()
             );
-
             String contenidoHtml = emailServiceImpl.cargarTemplate("chat-message.html", variables);
-
-            emailServiceImpl.enviarCorreoHtml(
-                    receiver.getEmail(),
-                    "📨 Nuevo mensaje en UbikkApp",
-                    contenidoHtml
-            );
+            emailServiceImpl.enviarCorreoHtml(receiver.getEmail(), "📨 Nuevo mensaje en UbikkApp", contenidoHtml);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        // Notificar mensaje en tiempo real al receptor
         ChatMessage frontendMsg = new ChatMessage();
         frontendMsg.setSenderId(sender.getId());
         frontendMsg.setReceiverId(receiver.getId());
@@ -89,24 +76,16 @@ public class WebSocketMessageController {
         frontendMsg.setRead(savedMessage.isRead());
         frontendMsg.setPropertyId(property.getId());
 
-        messagingTemplate.convertAndSend(
-                "/topic/messages/" + receiver.getId(),
-                frontendMsg
-        );
+        messagingTemplate.convertAndSend("/topic/messages/" + receiver.getId(), frontendMsg);
 
-        // Enviar conversación actualizada
         List<ConversationDTO> updatedList = messageService.getDetailedUserConversations(receiver.getId());
-
         ConversationDTO updatedSender = updatedList.stream()
                 .filter(conv -> conv.getId().equals(sender.getId()) && conv.getPropertyId().equals(property.getId()))
                 .findFirst()
                 .orElse(null);
 
         if (updatedSender != null) {
-            messagingTemplate.convertAndSend(
-                    "/topic/conversations/" + receiver.getId(),
-                    updatedSender
-            );
+            messagingTemplate.convertAndSend("/topic/conversations/" + receiver.getId(), updatedSender);
         }
     }
 }

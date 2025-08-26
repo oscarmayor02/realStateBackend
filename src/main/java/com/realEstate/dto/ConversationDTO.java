@@ -9,8 +9,8 @@ public class ConversationDTO {
     private int unreadCount;
     private String lastMessage;
     private LocalDateTime timestamp;
-    private Long propertyId;     // 👈 agregado
-    private String propertyTitle; // 👈 opcional si quieres mostrar el nombre de la propiedad
+    private Long propertyId;
+    private String propertyTitle;
 
     public ConversationDTO(Long id, String name, String email, Number unreadCount,
                            String lastMessage, LocalDateTime timestamp,
@@ -24,46 +24,24 @@ public class ConversationDTO {
         this.propertyId = propertyId;
         this.propertyTitle = propertyTitle;
     }
+
     public ConversationDTO() {}
 
-    // Getters y setters
-
-    public String getPropertyTitle() {
-        return propertyTitle;
-    }
-
-    public void setPropertyTitle(String propertyTitle) {
-        this.propertyTitle = propertyTitle;
-    }
-
-    public Long getPropertyId() {
-        return propertyId;
-    }
-
-    public void setPropertyId(Long propertyId) {
-        this.propertyId = propertyId;
-    }
-
+    // Getters y Setters
+    public String getPropertyTitle() { return propertyTitle; }
+    public void setPropertyTitle(String propertyTitle) { this.propertyTitle = propertyTitle; }
+    public Long getPropertyId() { return propertyId; }
+    public void setPropertyId(Long propertyId) { this.propertyId = propertyId; }
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
-
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
-
     public int getUnreadCount() { return unreadCount; }
     public void setUnreadCount(int unreadCount) { this.unreadCount = unreadCount; }
-
     public String getLastMessage() { return lastMessage; }
     public void setLastMessage(String lastMessage) { this.lastMessage = lastMessage; }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
-    }
+    public LocalDateTime getTimestamp() { return timestamp; }
+    public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
 }
