@@ -25,16 +25,16 @@ public class Message {
 
     @ManyToOne
     @JoinColumn(name = "sender_id")
-    @JsonManagedReference(value = "sender_id")
+    @JsonIgnore
     private User sender;
 
     @ManyToOne
     @JoinColumn(name = "receiver_id")
-    @JsonManagedReference(value = "receiver_id")
+    @JsonIgnore
     private User receiver;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonManagedReference(value = "property_id")
+    @JsonIgnore
     @JoinColumn(name = "property_id", nullable = false)
     private Property property;
 

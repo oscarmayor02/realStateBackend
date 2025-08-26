@@ -1,6 +1,7 @@
 package com.realEstate.controller;
 
 import com.realEstate.dto.ConversationDTO;
+import com.realEstate.dto.MessageDTO;
 import com.realEstate.dto.UserDTO;
 import com.realEstate.model.Message;
 import com.realEstate.repository.MessageRepository;
@@ -32,25 +33,16 @@ public class MessageController {
     }
 
     @GetMapping(value = "/history/{user1Id}/{user2Id}/{propertyId}", produces = "application/json")
-    public ResponseEntity<List<Message>> getChatHistory(
+    public ResponseEntity<List<MessageDTO>> getChatHistory(
             @PathVariable Long user1Id,
             @PathVariable Long user2Id,
             @PathVariable Long propertyId) {
-        // Verificar que user1Id o user2Id es dueño de la propiedad o participante de la conversación
+
         if (!messageServiceImpl.canAccessChat(user1Id, user2Id, propertyId)) {
             return ResponseEntity.status(403).build();
         }
-        List<Message> messages = messageService.getChatHistory(user1Id, user2Id, propertyId).stream()
-                .filter(m -> m.getProperty() != null && m.getProperty().getId().equals(propertyId))
-                .peek(m -> {
-                    if (m.getProperty() != null) {
-                        m.setPropertyName(m.getProperty().getTitle());
-                        m.setProperty(m.getProperty()); // evita serializar objeto completo
-                        m.setSender(m.getSender());   // opcional: solo envía senderId
-                        m.setReceiver(m.getReceiver()); // opcional
-                    }
-                })
-                .toList();
+
+        List<MessageDTO> messages = messageService.getChatHistory(user1Id, user2Id, propertyId);
         return ResponseEntity.ok(messages);
     }
 
