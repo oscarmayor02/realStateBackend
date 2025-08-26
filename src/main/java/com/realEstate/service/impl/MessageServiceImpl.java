@@ -1,6 +1,7 @@
 package com.realEstate.service.impl;
 
 import com.realEstate.dto.ConversationDTO;
+import com.realEstate.dto.MessageDTO;
 import com.realEstate.dto.UserDTO;
 import com.realEstate.model.Message;
 import com.realEstate.model.Property;
@@ -34,9 +35,24 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<Message> getChatHistory(Long user1Id, Long user2Id, Long propertyId) {
-        return messageRepository.findChatHistory(user1Id, user2Id, propertyId);
+    public List<MessageDTO> getChatHistory(Long user1Id, Long user2Id, Long propertyId) {
+        return messageRepository.findChatHistory(user1Id, user2Id, propertyId)
+                .stream()
+                .map(m -> new MessageDTO(
+                        m.getId(),
+                        m.getContent(),
+                        m.getTimestamp(),
+                        m.isRead(),
+                        (m.getSender() != null) ? m.getSender().getId() : null,
+                        (m.getSender() != null) ? m.getSender().getName() : null,
+                        (m.getReceiver() != null) ? m.getReceiver().getId() : null,
+                        (m.getReceiver() != null) ? m.getReceiver().getName() : null,
+                        (m.getProperty() != null) ? m.getProperty().getId() : null,
+                        (m.getProperty() != null) ? m.getProperty().getTitle() : null
+                ))
+                .toList();
     }
+
 
     @Override
     public List<UserDTO> getUserConversations(Long userId) {
