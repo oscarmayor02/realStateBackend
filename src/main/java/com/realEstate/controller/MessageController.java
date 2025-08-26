@@ -47,9 +47,9 @@ public class MessageController {
                         m.setPropertyName(m.getProperty().getTitle());
                         m.setSenderId(m.getSender().getId());
                         m.setReceiverId(m.getReceiver().getId());
-                        m.setProperty(m.getProperty());
-                        m.setSender(m.getSender());
-                        m.setReceiver(m.getReceiver());
+                        m.setProperty(null);
+                        m.setSender(null);
+                        m.setReceiver(null);
                     }
                 })
                 .toList();
