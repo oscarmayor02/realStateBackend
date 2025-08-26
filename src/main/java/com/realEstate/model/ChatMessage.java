@@ -1,5 +1,8 @@
 package com.realEstate.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ChatMessage {
     private Long senderId;
     private Long receiverId;
