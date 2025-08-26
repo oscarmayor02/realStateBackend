@@ -45,11 +45,9 @@ public class MessageController {
                 .peek(m -> {
                     if (m.getProperty() != null) {
                         m.setPropertyName(m.getProperty().getTitle());
-                        m.setSenderId(m.getSender().getId());
-                        m.setReceiverId(m.getReceiver().getId());
-                        m.setProperty(null);
-                        m.setSender(null);
-                        m.setReceiver(null);
+                        m.setProperty(m.getProperty()); // evita serializar objeto completo
+                        m.setSender(m.getSender());   // opcional: solo envía senderId
+                        m.setReceiver(m.getReceiver()); // opcional
                     }
                 })
                 .toList();
