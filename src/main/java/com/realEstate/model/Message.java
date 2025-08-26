@@ -36,7 +36,10 @@ public class Message {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "property_id", nullable = false)
     private Property property;
+    @Transient
     private Long senderId;
+
+    @Transient
     private Long receiverId;
     // Getters y Setters
 
